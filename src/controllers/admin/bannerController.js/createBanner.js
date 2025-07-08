@@ -5,7 +5,7 @@ const catchAsync = require("../../../utils/catchAsync");
 exports.createBanner = catchAsync(async(req, res, next) => {
 
     const { service_Id, vendor_Id, type, redirect_url, status } = req.body;
-
+    console.log("Hello");
     
     const imagePath = req.files?.image?.[0].path; 
 
