@@ -1,0 +1,404 @@
+{
+	"info": {
+		"_postman_id": "32984285-fc4a-491a-bf88-600fb65eef51",
+		"name": "prefitt",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31431495",
+		"_collection_link": "https://g-techs.postman.co/workspace/Anish's-WorkSpace-(-Tekniko-Glo~37ab86be-c869-4951-8f6c-bd52643db9de/collection/31431495-32984285-fc4a-491a-bf88-600fb65eef51?action=share&source=collection_link&creator=31431495"
+	},
+	"item": [
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "test",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/api/admin/test",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"test"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "test",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/api/user/test",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"test"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "vendor",
+			"item": [
+				{
+					"name": "product",
+					"item": [
+						{
+							"name": "create product",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Summer Cotton Shirt",
+											"type": "text"
+										},
+										{
+											"key": "category",
+											"value": "6654fcd1d734c96d3fba0156",
+											"type": "text"
+										},
+										{
+											"key": "fabric",
+											"value": "6654fcd1d734c96d3fba0159",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "1500",
+											"type": "text"
+										},
+										{
+											"key": "discountedPrice",
+											"value": "1200",
+											"type": "text"
+										},
+										{
+											"key": "returnAvailable",
+											"value": "true",
+											"type": "text"
+										},
+										{
+											"key": "exchangeAvailable",
+											"value": "true",
+											"type": "text"
+										},
+										{
+											"key": "vendor",
+											"value": "6654fc90d734c96d3fba0153",
+											"type": "text"
+										},
+										{
+											"key": "variants",
+											"value": "[\n  {\n    \"color\": \"Red\",\n    \"size\": \"M\",\n    \"quantity\": 20,\n    \"price\": 1500,\n    \"discountedPrice\": 1200\n  },\n  {\n    \"color\": \"Blue\",\n    \"size\": \"L\",\n    \"quantity\": 10\n  }\n]\n",
+											"type": "text"
+										},
+										{
+											"key": "primary_image",
+											"type": "file",
+											"src": "/E:/Download/prefitt/shirt1.webp"
+										},
+										{
+											"key": "gallery_image",
+											"type": "file",
+											"src": [
+												"/E:/Download/prefitt/shirt2.png",
+												"/E:/Download/prefitt/shirt3.png",
+												"/E:/Download/prefitt/shirt4.png"
+											]
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseurl}}/api/vendor/product",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"api",
+										"vendor",
+										"product"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update product",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Summer Cotton Shirt",
+											"type": "text"
+										},
+										{
+											"key": "category",
+											"value": "6654fcd1d734c96d3fba0156",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "fabric",
+											"value": "6654fcd1d734c96d3fba0159",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "price",
+											"value": "1500",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "discountedPrice",
+											"value": "1200",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "returnAvailable",
+											"value": "true",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "exchangeAvailable",
+											"value": "true",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "vendor",
+											"value": "6654fc90d734c96d3fba0153",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "variants",
+											"value": "[\n  {\n    \"color\": \"Red\",\n    \"size\": \"M\",\n    \"quantity\": 20,\n    \"price\": 1500,\n    \"discountedPrice\": 1200\n  },\n  {\n    \"color\": \"Blue\",\n    \"size\": \"L\",\n    \"quantity\": 10\n  }\n]\n",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "primary_image",
+											"type": "file",
+											"src": "/E:/Download/prefitt/shirt1.webp",
+											"disabled": true
+										},
+										{
+											"key": "gallery_image",
+											"type": "file",
+											"src": [
+												"/E:/Download/prefitt/shirt2.png",
+												"/E:/Download/prefitt/shirt3.png",
+												"/E:/Download/prefitt/shirt4.png"
+											],
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseurl}}/api/vendor/product/6835b0de5b5336e5dfbfd99b",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"api",
+										"vendor",
+										"product",
+										"6835b0de5b5336e5dfbfd99b"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "product list",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseurl}}/api/vendor/product",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"api",
+										"vendor",
+										"product"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "product details",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseurl}}/api/vendor/product/6835b0de5b5336e5dfbfd99b",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"api",
+										"vendor",
+										"product",
+										"6835b0de5b5336e5dfbfd99b"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "product delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseurl}}/api/vendor/product/6835b0de5b5336e5dfbfd99b",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"api",
+										"vendor",
+										"product",
+										"6835b0de5b5336e5dfbfd99b"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "stock / status update",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "// you can send single data then it update only single\r\n{\r\n  \"isStock\": false, // ['true', 'false']\r\n  \"status\": \"inactive\" // ['active', 'inactive']\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseurl}}/api/vendor/product/6835b7fef9793f5a92bb9ec5/stock-status",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"api",
+										"vendor",
+										"product",
+										"6835b7fef9793f5a92bb9ec5",
+										"stock-status"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "test",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/api/admin/test",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"test"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "test",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseurl}}/api/test",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"api",
+						"test"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseurl",
+			"value": "http://localhost:5001",
+			"type": "string"
+		}
+	]
+}
