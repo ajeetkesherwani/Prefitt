@@ -88,9 +88,30 @@ const subOrderSchema = new mongoose.Schema(
         "shipped",
         "delivered",
         "cancelled",
+        "return_requests", 
+        "return_received"
       ],
       default: "pending",
     },
+     pickupotp: { 
+        type: String 
+      },
+      expiresAt: { 
+        type: Date 
+      },
+      verified: { 
+        type: Boolean, 
+        default: false 
+      },
+    isDeliveryAsign: {
+      type: Boolean,
+      default: false
+    },
+    assignDeliveryBoyId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Driver",
+      default: null
+    }
   },
   { timestamps: true }
 );
