@@ -42,5 +42,9 @@ router.use("/product", require("./vendor/productRoutes"));
 router.use("/order", require("./vendor/orderRoutes"));
 router.use("/productInventory", require("./vendor/productInventoryRoutes"));
 router.use("/common", require("./vendor/commonRoutes"));
+router.use("/pending/order", require("./vendor/orderListRoutes"));
+router.use("/return", require("./vendor/orderReturnRoutes"));
+router.use("/return-order", require("./vendor/returnRequestRoutes"));
+router.use("/dashboard", require("./vendor/dashboardRoutes"));
 
 module.exports = router;
