@@ -23,5 +23,6 @@ exports.userAuthenticate = catchAsync(async (req, res, next) => {
   if (!user) return next(new AppError("User does not exist.", 404));
 
   req.user = user;
+  // console.log(req.user);
   next();
 });

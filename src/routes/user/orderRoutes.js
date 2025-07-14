@@ -16,7 +16,12 @@ const {
 const {
   createOrderReturnRequest,
 } = require("../../controllers/user/orderController/createOrderReturnRequest");
+
 const validateResponse = require("../../middlewares/validateResponse");
+
+const { 
+  createExchangeRequests 
+} = require("../../controllers/user/orderController/createExchangeRequest");
 
 const router = express.Router();
 
@@ -35,5 +40,9 @@ router.post(
   fileUploader("orderReturn", [{ name: "uploadFiles", maxCount: 5 }]),
   createOrderReturnRequest
 );
+
+router.post("/createExchangeRequest", userAuthenticate,
+   fileUploader("exchangeOrder", [{ name: "uploadFiles", maxCount: 5 }]),
+   createExchangeRequests);
 
 module.exports = router;

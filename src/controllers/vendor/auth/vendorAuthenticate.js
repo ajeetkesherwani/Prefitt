@@ -18,10 +18,10 @@ exports.vendorAuthenticate = catchAsync(async (req, res, next) => {
   if (!token) return next(new AppError("You are not loggedin.", 404));
 
   const decoded = jwt.verify(token, process.env.JWT_TOKEN_SECRET);
-
   const vendor = await Vendor.findById(decoded.id);
   if (!vendor) return next(new AppError("Vendor not exist.", 404));
 
   req.vendor = vendor;
+ 
   next();
 });

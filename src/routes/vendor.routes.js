@@ -46,5 +46,8 @@ router.use("/pending/order", require("./vendor/orderListRoutes"));
 router.use("/return", require("./vendor/orderReturnRoutes"));
 router.use("/return-order", require("./vendor/returnRequestRoutes"));
 router.use("/dashboard", require("./vendor/dashboardRoutes"));
+router.use("/live-order", require("./vendor/liveOrderRoutes.js"));
+router.use("/cmspage", require("./vendor/cmsPageRoutes.js"));
+router.use("/exchangeRequest", require("./vendor/exchangeRoutes.js"));
 
 module.exports = router;

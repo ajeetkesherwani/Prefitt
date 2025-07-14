@@ -23,5 +23,6 @@ exports.vendorAuthenticate = catchAsync(async (req, res, next) => {
   if (!vendor) return next(new AppError("Vendor not exist.", 404));
 
   req.vendor = vendor;
+   
   next();
 });

@@ -20,9 +20,14 @@ const {
     getOrderListDetails 
 } = require("../../controllers/vendor/homeController/subOrderListDetails");
 
+const { 
+    getDriver 
+} = require("../../controllers/vendor/homeController/getDriver");
+
 
 const router = express.Router();
 
+router.get("/driver", getDriver);
 router.get("/list", getOrderList);
 router.get("/list/details", getOrderListDetails);
 router.patch("/suborder/:subOrderId/assignDriver", assignDeliveryBoyTosubOrder);
