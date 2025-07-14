@@ -34,7 +34,6 @@ exports.sendOtp = catchAsync(async (req, res, next) => {
   }
 
   // await sendSms(vendor.mobile, `Your OTP is ${otp}`);
-
   res.status(200).json({
     status: "success",
     message: "OTP sent successfully",
