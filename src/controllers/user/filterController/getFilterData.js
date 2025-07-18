@@ -16,6 +16,7 @@ exports.getFilterData = catchAsync(async (req, res, next) => {
       errorResponse(res, "Vendor not found", 404);
     }
 
+    console.log("Hello");
     const category = await Category.find({
       serviceId: vendor.serviceId,
       cat_id: { $exists: false },
