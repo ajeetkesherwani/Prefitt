@@ -5,8 +5,8 @@ const { successResponse } = require("../../../utils/responseHandler");
 
 exports.updateExchangeRequestStatus = catchAsync(async(req, res, next) => {
 
-    // const vendorId = req.vendor._id;
-    const vendorId = "686776e6704b90b34a4ac868";
+    const vendorId = req.vendor._id;
+    // const vendorId = "686776e6704b90b34a4ac868";
     if(!vendorId) return next(new AppError("vendorId is required",400));
 
     const { id } = req.params;

@@ -16,6 +16,10 @@ const {
 const router = express.Router();
 
 router.get("/list", vendorAuthenticate, getLiveOrders);
-router.patch("/update/:id", vendorAuthenticate, liveOrderUpdate);
+router.patch(
+  "/update/:inventoryId/:index",
+  vendorAuthenticate,
+  liveOrderUpdate
+);
 
 module.exports = router;

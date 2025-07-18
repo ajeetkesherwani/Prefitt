@@ -6,7 +6,7 @@ const productInventorySchema = new mongoose.Schema({
     service_id:{ type: mongoose.Schema.Types.ObjectId, ref: "serivce", required: true },
     category_id:{ type: mongoose.Schema.Types.ObjectId, ref: "category", required: true },
     subCategory_id:{ type: mongoose.Schema.Types.ObjectId, ref: "subCategory", required: true },
-    product_id:{ type: mongoose.Schema.Types.ObjectId, ref: "product", required: true },
+    product_id:{ type: mongoose.Schema.Types.ObjectId, ref: "Products", required: true },
 
     inventoryData:[
         {
@@ -20,17 +20,12 @@ const productInventorySchema = new mongoose.Schema({
                     value: {
                         type: String,         
                         required: true,
-                        trim: true
                     }
                 }
             ],
-            mrp:{
+            add_on_price: {
                 type: Number,
-                required: true
-            },
-            sellingPrice: {
-                type: Number,
-                required: true
+                default: 0
             },
             quantity:{
                 type: Number,

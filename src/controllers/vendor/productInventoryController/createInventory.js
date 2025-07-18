@@ -17,6 +17,7 @@ exports.createInventory = catchAsync(async (req, res, next) => {
     return next(new AppError("all fields are required", 400));
   }
 
+
   const productInventory = new ProductInventory({
     vendor_id,
     service_id,

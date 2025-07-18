@@ -26,7 +26,7 @@ exports.updateSubOrderListStatus = catchAsync(async (req, res, next) => {
         if (!deliveryBoy) {
             return next(new AppError("Assigned delivery boy not found", 404));
         }
-
+               // sendEmail here
         console.log(`Sending OTP ${generateOtp} to delivery boy at ${deliveryBoy.mobile}`);
     }
 

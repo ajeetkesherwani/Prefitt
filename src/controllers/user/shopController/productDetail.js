@@ -1,3 +1,4 @@
+const ProductInventory = require("../../../models/productInventry");
 const Product = require("../../../models/products");
 const AppError = require("../../../utils/AppError");
 const catchAsync = require("../../../utils/catchAsync");
@@ -20,11 +21,22 @@ exports.productDetail = catchAsync(async (req, res) => {
     return new AppError("Product not found", 404);
   }
 
+  const productInventory = await ProductInventory.findOne({ product_id: productId })
+    .populate({
+      path: "inventoryData.variantData.variantType_id",
+      select: "variantName",
+    })
+    .lean();
+
+  const finalData = productInventory?.inventoryData || [];
+
   res.status(200).json({
     success: true,
     message: "Product details found",
     count: productDetail.length,
     data: productDetail,
     reletedProducts: reletedProducts,
+    inventoryData: finalData
+
   });
 });

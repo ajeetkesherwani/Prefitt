@@ -10,12 +10,8 @@ const { successResponse } = require("../../../utils/responseHandler");
 exports.registerDriver = catchAsync(async (req, res, next) => {
 
   const driver = JSON.parse(req.body.driver);
-  console.log("driver", driver)
   const driverDetail = JSON.parse(req.body.driverDetail);
-  console.log("driverDetails", driverDetail);
   const driverAccountDetail = JSON.parse(req.body.driverAccountDetail);
-  console.log("driverAccountDetail", driverAccountDetail)
-
 
   driver.frontPhoto = req.files?.frontPhoto?.[0]?.path;
 
