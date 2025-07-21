@@ -1,6 +1,7 @@
 const OrderAddress = require("../../../models/OrderAddress");
 const MainOrder = require("../../../models/mainOrder");
 const SubOrder = require("../../../models/SubOrder");
+const ProductInventory = require("../../../models/productInventry");
 const catchAsync = require("../../../utils/catchAsync");
 const AppError = require("../../../utils/AppError");
 
@@ -14,7 +15,55 @@ const createSubOrder = async (
   coupon = null,
   mainOrderId
 ) => {
+
+  const productIds = products.map((p) => p.productId);
+
+  const allInventories = await ProductInventory.find({
+    vendor_id: vendorId,
+    product_id: { $in: productIds },
+  });
+
+  const inventory = new Map();
+  for (const inv of allInventories) {
+    inventory.set(inv.product_id.toString(), inv);
+  }
+
+  for (const product of products) {
+    const { productId, quantity, variant } = product;
+    const inventory = inventory.get(productId.toString());
+
+    if (!inventory) {
+      return next(new AppError(`Inventory not found for this Product Id ${productId}`,404));
+    }
+
+    const matchedInventory = inventory.inventoryData.find((inv) =>
+      inv.variantData.some(
+        (v) =>
+          v.variantType_id.toString() === variant.variantTypeId.toString() &&
+          v.value === variant.value
+      )
+    );
+
+    if (!matchedInventory) {
+      return next(new AppError(`varaint ${variant.value} not found in inventory`,400));
+    }
+
+    if (matchedInventory.quantity < quantity) {
+      throw new AppError(
+        `Insufficient stock for variant ${variant.value} (available: ${matchedInventory.quantity}, requested: ${quantity})`,
+        400
+      );
+    }
+
+    matchedInventory.quantity -= quantity;
+    if (matchedInventory.quantity <= 0) matchedInventory.inStock = false;
+
+
+    await inventory.save();
+  }
+
   const { items, subTotal, gstTotal } = calculateProductDetails(products);
+
   const couponDiscount = coupon?.discountAmount || 0;
 
   const subOrder = new SubOrder({
@@ -37,6 +86,8 @@ const createSubOrder = async (
 
   await subOrder.save();
 
+
+
   return {
     subOrder,
     total: subOrder.totalAmount,
@@ -44,10 +95,10 @@ const createSubOrder = async (
     discount: couponDiscount,
     couponSummary: coupon?.code
       ? {
-          vendorId,
-          code: coupon.code,
-          discountAmount: couponDiscount,
-        }
+        vendorId,
+        code: coupon.code,
+        discountAmount: couponDiscount,
+      }
       : null,
   };
 };
