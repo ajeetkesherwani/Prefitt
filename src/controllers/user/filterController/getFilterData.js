@@ -11,7 +11,6 @@ exports.getFilterData = catchAsync(async (req, res, next) => {
     const { vendorId } = req.query;
 
     const vendor = await Vendor.findById(vendorId);
-
     if (!vendor) {
       errorResponse(res, "Vendor not found", 404);
     }
@@ -24,6 +23,12 @@ exports.getFilterData = catchAsync(async (req, res, next) => {
     const varients = await VariantType.find({
       serviceId: vendor.serviceId,
     }).select("variantName");
+
+    const data = {
+      categories: category,
+      variants: varients,
+    };
+
     return res.status(200).json({
       success: true,
       message: "Services retrieved successfully",
