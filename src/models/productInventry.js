@@ -2,15 +2,15 @@ const mongoose = require("mongoose");
 
 const productInventorySchema = new mongoose.Schema({
 
-    vendor_id:{ type: mongoose.Schema.Types.ObjectId, ref: "Vendor", required: true },
-    service_id:{ type: mongoose.Schema.Types.ObjectId, ref: "serivce", required: true },
-    category_id:{ type: mongoose.Schema.Types.ObjectId, ref: "category", required: true },
-    subCategory_id:{ type: mongoose.Schema.Types.ObjectId, ref: "subCategory", required: true },
-    product_id:{ type: mongoose.Schema.Types.ObjectId, ref: "product", required: true },
+    vendor_id: { type: mongoose.Schema.Types.ObjectId, ref: "Vendor", required: true },
+    service_id: { type: mongoose.Schema.Types.ObjectId, ref: "Serivce", required: true },
+    category_id: { type: mongoose.Schema.Types.ObjectId, ref: "Category", required: true },
+    subCategory_id: { type: mongoose.Schema.Types.ObjectId, ref: "SubCategory", required: true },
+    product_id: { type: mongoose.Schema.Types.ObjectId, ref: "Products", required: true },
 
-    inventoryData:[
+    inventoryData: [
         {
-            variantData:[ 
+            variantData: [
                 {
                     variantType_id: {
                         type: mongoose.Schema.Types.ObjectId,
@@ -18,35 +18,31 @@ const productInventorySchema = new mongoose.Schema({
                         required: true
                     },
                     value: {
-                        type: String,         
+                        type: String,
                         required: true,
                         trim: true
                     }
                 }
             ],
-            mrp:{
+            addOnPrice: {
                 type: Number,
-                required: true
+                default: 0
             },
-            sellingPrice: {
-                type: Number,
-                required: true
-            },
-            quantity:{
+            quantity: {
                 type: Number,
             },
-            inStock:{
+            inStock: {
                 type: Boolean,
                 default: true
             },
             status: {
-                type:String,
-                enum: ["active","inactive"],
+                type: String,
+                enum: ["active", "inactive"],
                 default: "active"
             }
         }
     ]
-},{ timestamps: true });
+}, { timestamps: true });
 
 const ProductInventory = mongoose.model("ProductInventory", productInventorySchema);
 
