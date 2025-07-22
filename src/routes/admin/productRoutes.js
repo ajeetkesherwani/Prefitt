@@ -26,6 +26,11 @@ const {
   productDelete,
 } = require("../../controllers/admin/productController/productDelete");
 
+const { 
+  getProductBySubCat 
+} = require("../../controllers/admin/productController/getProductBySubCat");
+
+router.get("/list/:subCatId", adminAuthenticate, getProductBySubCat);
 router.get("/list/", adminAuthenticate, getAllProduct);
 router.get("/list/:vendorId", adminAuthenticate, getAllVendorProduct);
 router.post(
@@ -48,5 +53,7 @@ router.patch(
 );
 router.get("/details/:productId", adminAuthenticate, productDetail);
 router.delete("/delete/:id", adminAuthenticate, productDelete);
+
+
 
 module.exports = router;

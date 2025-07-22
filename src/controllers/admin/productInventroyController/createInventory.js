@@ -4,10 +4,8 @@ const catchAsync = require("../../../utils/catchAsync");
 
 exports.createInventory = catchAsync(async (req, res, next) => {
 
- const vendorId = req.vendor._id;
- if(!vendorId) return next(new AppError("vendorID is required",400));
-
   const {
+    vendor_id,
     service_id,
     category_id,
     subCategory_id,
@@ -15,12 +13,12 @@ exports.createInventory = catchAsync(async (req, res, next) => {
     inventoryData
   } = req.body;
 
-  if (!service_id || !category_id || !subCategory_id || !product_id || !inventoryData) {
+  if (!vendor_id || !service_id || !category_id || !subCategory_id || !product_id || !inventoryData) {
     return next(new AppError("all fields are required", 400));
   }
 
   const productInventory = new ProductInventory({
-    vendor_Id: vendorId,
+    vendor_id,
     service_id,
     category_id,
     subCategory_id,
