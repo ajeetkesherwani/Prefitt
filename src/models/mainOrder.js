@@ -52,6 +52,13 @@ const mainOrderSchema = new mongoose.Schema(
       ref: "OrderAddress",
       required: true,
     },
+    assignDileveryBoyId: {
+      type: mongoose.Schema.Types.ObjectId, ref: "Driver"
+    },
+    isDriverAssign: {
+       type: "Boolean",
+       default: false
+    }
   },
   { timestamps: true }
 );
