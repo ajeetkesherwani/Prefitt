@@ -25,6 +25,7 @@ const {
   deleteProduct,
 } = require("../../controllers/vendor/productController/deleteProduct");
 
+
 router.get("/list", vendorAuthenticate, getProduct);
 router.post(
   "/create",

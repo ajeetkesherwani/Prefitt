@@ -12,9 +12,21 @@ const {
     getOrderListDetail 
 } = require("../../controllers/admin/orderController/getOrderlistDetail");
 
+const { 
+    getAllDriver 
+} = require("../../controllers/admin/orderController/getDriver");
+
+const { 
+    assignDriverToOrder 
+} = require("../../controllers/admin/orderController/assignDriverToOrder");
+
 const router = express.Router();
 
-router.get("/list", adminAuthenticate, getAllOrderList);
+router.get("/list/:type", adminAuthenticate, getAllOrderList);
 router.get("/list/:mainOrderId", adminAuthenticate, getOrderListDetail);
+router.get("/driver/list", adminAuthenticate, getAllDriver);
+router.post("/assign-driver", adminAuthenticate, assignDriverToOrder);
+
+
 
 module.exports = router;
