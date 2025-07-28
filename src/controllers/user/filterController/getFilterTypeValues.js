@@ -40,6 +40,7 @@ exports.getFilterTypeValues = catchAsync(async (req, res, next) => {
         );
       }
 
+      console.log("Checking in DB for type:", formattedType);
       // 2. Check in DB-based filters
       const variantType = await VariantType.findOne({
         name: formattedType,

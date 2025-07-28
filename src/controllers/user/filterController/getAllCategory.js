@@ -64,7 +64,7 @@ exports.getAllCategory = catchAsync(async (req, res, next) => {
       .lean();
 
     const updatedCategories = categories.map((cat) => ({
-      ...cat.toObject(),
+      ...cat,
       filterData,
     }));
     successResponse(
