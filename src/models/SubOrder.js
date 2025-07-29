@@ -89,7 +89,8 @@ const subOrderSchema = new mongoose.Schema(
         "delivered",
         "cancelled",
         "return_requests", 
-        "return_received"
+        "return_received",
+        "pickup"
       ],
       default: "pending",
     },
@@ -111,6 +112,10 @@ const subOrderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Driver",
       default: null
+    },
+    deliveryPhoto: {
+      type: [String],
+      default: [],
     }
   },
   { timestamps: true }

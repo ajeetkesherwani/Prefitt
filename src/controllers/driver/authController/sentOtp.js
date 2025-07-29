@@ -9,7 +9,7 @@ exports.sendOtp = catchAsync(async (req, res, next) => {
     if (!mobile) return next(new AppError("mobile is required", 400));
 
     const driver = await Driver.findOne({ mobile });
-    if(!driver) return next(new AppError("Driver not registerd", 400));
+    if (!driver) return next(new AppError("Driver not registerd", 400));
 
     if (!driver.status) return next(
         new AppError("You are not verified. wait for verification", 403)

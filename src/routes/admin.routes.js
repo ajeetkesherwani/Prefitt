@@ -18,5 +18,6 @@ router.use("/common", require("./admin/commonRoutes"));
 router.use("/productInventory", require("./admin/inventoryRoutes"));
 router.use("/user", require("./admin/userRoutes"));
 router.use("/mainOrder", require("./admin/orderRoutes"));
+router.use("/driver", require("./admin/driverRoutes"));
 
 module.exports = router;
