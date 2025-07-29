@@ -16,7 +16,11 @@ exports.updateInventory = catchAsync(async (req, res, next) => {
         inventoryData,
     } = req.body;
 
-    const inventory = await ProductInventory.findById(id);
+    const inventory = await ProductInventory.findById(id)
+   .populate({
+    path: "inventoryData.variantData.variantType_id",
+    model: "VariantType",
+    select: "variantName" });
     if (!inventory) return next(new AppError("Inventory not found", 404));
 
     if (vendor_id) inventory.vendor_id = vendor_id;
@@ -37,6 +41,7 @@ exports.updateInventory = catchAsync(async (req, res, next) => {
                 if ("quantity" in newItem) existingItem.quantity = newItem.quantity;
                 if ("inStock" in newItem) existingItem.inStock = newItem.inStock;
                 if ("status" in newItem) existingItem.status = newItem.status;
+                if ("add_on_price" in newItem) existingItem.add_on_price = newItem.add_on_price;
 
                 if (Array.isArray(newItem.variantData)) {
                     newItem.variantData.forEach((updatedVariant) => {
@@ -58,10 +63,15 @@ exports.updateInventory = catchAsync(async (req, res, next) => {
     }
 
     await inventory.save();
+    
+
+       const populatedInventory = await ProductInventory.findOne(inventory._id)
+        .populate("product_id", "name") // product name
+        .populate("inventoryData.variantData.variantType_id", "variantName");
 
     res.status(200).json({
         status: true,
         message: "Inventory updated successfully",
-        data: inventory,
+        data: populatedInventory,
     });
 });

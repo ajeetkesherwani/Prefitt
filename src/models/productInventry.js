@@ -24,7 +24,7 @@ const productInventorySchema = new mongoose.Schema({
                     }
                 }
             ],
-            addOnPrice: {
+            add_on_price: {
                 type: Number,
                 default: 0
             },
