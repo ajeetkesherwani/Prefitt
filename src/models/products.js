@@ -1,17 +1,4 @@
 const mongoose = require("mongoose");
-
-// const variantSchema = new mongoose.Schema({
-//   VariantTypeId: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: "VariantType",
-//     required: true,
-//   },
-//   value: { type: [String], required: true },
-//   // quantity: { type: Number, required: true },
-//   // price: { type: Number },
-//   // discountedPrice: { type: Number },
-// });
-
 const variantSchema = new mongoose.Schema({
   VariantTypeId: {
     type: mongoose.Schema.Types.ObjectId,

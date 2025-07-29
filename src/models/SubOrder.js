@@ -26,13 +26,15 @@ const subOrderSchema = new mongoose.Schema(
         },
         name: String,
         quantity: Number,
-        variant: {
-          value: String,
-          variantTypeId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "VariantType",
+        variant: [
+          {
+            value: String,
+            variantTypeId: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "VariantType",
+            },
           },
-        },
+        ],
         price: Number,
         discountedPrice: Number,
         gstPercentage: Number,
@@ -88,30 +90,30 @@ const subOrderSchema = new mongoose.Schema(
         "shipped",
         "delivered",
         "cancelled",
-        "return_requests", 
-        "return_received"
+        "return_requests",
+        "return_received",
       ],
       default: "pending",
     },
-     pickupotp: { 
-        type: String 
-      },
-      expiresAt: { 
-        type: Date 
-      },
-      verified: { 
-        type: Boolean, 
-        default: false 
-      },
+    pickupotp: {
+      type: String,
+    },
+    expiresAt: {
+      type: Date,
+    },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
     isDeliveryAsign: {
       type: Boolean,
-      default: false
+      default: false,
     },
     assignDeliveryBoyId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Driver",
-      default: null
-    }
+      default: null,
+    },
   },
   { timestamps: true }
 );

@@ -3,6 +3,11 @@ const MainOrder = require("../../../models/mainOrder");
 const SubOrder = require("../../../models/SubOrder");
 const catchAsync = require("../../../utils/catchAsync");
 const AppError = require("../../../utils/AppError");
+const {
+  successResponse,
+  errorResponse,
+} = require("../../../utils/responseHandler");
+const ProductInventory = require("../../../models/productInventry");
 
 const saveOrderAddress = async (address) => {
   return await new OrderAddress(address).save();
@@ -14,8 +19,7 @@ const createSubOrder = async (
   coupon = null,
   mainOrderId
 ) => {
-
-    const productIds = products.map((p) => p.productId);
+  const productIds = products.map((p) => p.productId);
 
   const allInventories = await ProductInventory.find({
     vendor_id: vendorId,
@@ -32,7 +36,12 @@ const createSubOrder = async (
     const inventory = inventoryMap.get(productId.toString());
 
     if (!inventory) {
-      return next(new AppError(`Inventory not found for this Product Id ${productId}`, 404));
+      return next(
+        new AppError(
+          `Inventory not found for this Product Id ${productId}`,
+          404
+        )
+      );
     }
 
     const matchedInventory = inventory.inventoryData.find((inv) =>
@@ -44,7 +53,9 @@ const createSubOrder = async (
     );
 
     if (!matchedInventory) {
-      return next(new AppError(`varaint ${variant.value} not found in inventory`, 400));
+      return next(
+        new AppError(`varaint ${variant.value} not found in inventory`, 400)
+      );
     }
 
     if (matchedInventory.quantity < quantity) {
@@ -56,7 +67,6 @@ const createSubOrder = async (
 
     matchedInventory.quantity -= quantity;
     if (matchedInventory.quantity <= 0) matchedInventory.inStock = false;
-
 
     await inventory.save();
   }
@@ -183,10 +193,9 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 
   await mainOrder.save();
 
-  res.status(201).json({
-    success: true,
-    message: "Order placed successfully",
-    orderId: mainOrder._id,
-    subOrders: subOrderIds,
-  });
+  const populatedOrder = await MainOrder.findById(mainOrder._id).populate(
+    "subOrders"
+  );
+
+  successResponse(res, "Order created successfully", populatedOrder, 201);
 });

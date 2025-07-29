@@ -45,6 +45,7 @@ router.use("/userAddress", require("./user/userAddressRoutes"));
 router.use("/ratingReview", require("./user/reviewRoutes"));
 router.use("/wishlist", require("./user/wishlistRoutes"));
 router.use("/addToCart", require("./user/addToCartRoutes"));
+router.use("/checkout", require("./user/checkoutRoutes"));
 router.use("/order", require("./user/orderRoutes"));
 router.use("/cmsData", require("./user/cmsRoutes"));
 router.use("/filter", require("./user/filterRoutes"));

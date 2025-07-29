@@ -7,9 +7,12 @@ exports.getAddTOCart = catchAsync(async (req, res, next) => {
   if (!user_Id) return next(new AppError("id is required", 400));
 
   const getCart = await AddToCart.find({ user_Id })
-    .populate("product_Id", "name primary_image ")
+    .populate("product_Id", "name primary_image")
     .populate("vendorId", "shopName")
-    .populate("variant.variantTypeId");
+    .populate("variants.variantTypeId")
+    .sort({ createdAt: -1 })
+    .lean();
+
   if (!getCart) return next(new AppError("Cart not found", 404));
 
   res.status(200).json({
