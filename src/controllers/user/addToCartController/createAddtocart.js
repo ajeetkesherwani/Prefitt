@@ -1,45 +1,114 @@
 const AddToCart = require("../../../models/addToCart");
+const Product = require("../../../models/products");
+const ProductInventory = require("../../../models/productInventry");
 const AppError = require("../../../utils/AppError");
 const catchAsync = require("../../../utils/catchAsync");
 
 exports.createAddtocart = catchAsync(async (req, res, next) => {
-  console.log(req.body);
   const user_Id = req.user.id;
-  const { product_Id, vendorId, pro_qty, variant } = req.body;
+  const { product_Id, vendorId, pro_qty, variants } = req.body;
 
+  // Validate input data
   if (!product_Id) return next(new AppError("product_Id is required", 400));
   if (!vendorId) return next(new AppError("vendorId is required", 400));
   if (!pro_qty) return next(new AppError("pro_qty is required", 400));
-  if (!variant) return next(new AppError("variant is required", 400));
+  if (!variants || !Array.isArray(variants) || variants.length === 0) {
+    return next(new AppError("variants array is required", 400));
+  }
 
+  // ✅ Fetch product base price
+  const product = await Product.findById(product_Id).select(
+    "discountedPrice price"
+  );
+  if (!product) return next(new AppError("Product not found", 404));
+
+  const basePrice = product.discountedPrice || product.price;
+
+  // ✅ Find matching inventoryData for the selected variants
+  const inventoryDoc = await ProductInventory.findOne({
+    product_id: product_Id,
+  }).lean();
+  if (
+    !inventoryDoc ||
+    !inventoryDoc.inventoryData ||
+    inventoryDoc.inventoryData.length === 0
+  ) {
+    return next(new AppError("No inventory data found for product", 404));
+  }
+
+  // 🔍 Match variants with inventoryData
+  const selectedInventory = inventoryDoc.inventoryData.find((inv) => {
+    const variantMap = new Map(
+      inv.variantData.map((v) => [
+        v.variantType_id.toString(),
+        v.value.toLowerCase(),
+      ])
+    );
+    return variants.every((sel) => {
+      const match =
+        variantMap.get(sel.variantTypeId.toString()) ===
+        sel.value.toLowerCase();
+      return match;
+    });
+  });
+
+  if (!selectedInventory) {
+    return next(
+      new AppError(
+        "Selected variant combination not available in inventory",
+        400
+      )
+    );
+  }
+
+  const addOnPrice = selectedInventory.add_on_price || 0;
+  const finalPrice = basePrice + addOnPrice;
+
+  // ✅ Check if cart already has this product with same variant combo
   const existingCart = await AddToCart.findOne({
     user_Id,
     product_Id,
+    variants: {
+      $all: variants.map((v) => ({
+        variantTypeId: v.variantTypeId.toString(),
+        value: v.value.toLowerCase(),
+      })),
+    },
   });
+
   if (existingCart) {
-    existingCart.quantity = String(Number(pro_qty));
-    existingCart.variant = variant;
-    await existingCart.save();
+    // If a matching cart item exists, update the existing item
+    existingCart.quantity += Number(pro_qty); // Add to existing quantity
+    existingCart.basePrice = basePrice;
+    existingCart.addOnPrice = addOnPrice;
+    existingCart.finalPrice = finalPrice;
+    existingCart.variants = variants; // Update the variants (even if they're the same)
+
+    await existingCart.save(); // Save the updated cart item
     return res.status(200).json({
       status: true,
-      message: "existingCart updated successfully",
+      message: "Cart updated successfully",
       data: existingCart,
     });
   }
 
+  // ✅ Create new cart item if it doesn't exist or variant combinations differ
   const newAddtocart = new AddToCart({
     user_Id,
     product_Id,
     vendorId,
-    quantity: pro_qty,
-    variant,
+    quantity: Number(pro_qty),
+    variants,
+    basePrice,
+    addOnPrice,
+    finalPrice,
   });
 
-  await newAddtocart.save();
+  await newAddtocart.save(); // Save the new cart item
 
-  res.status(200).json({
+  return res.status(200).json({
     status: true,
-    message: "new addToCart added successfully",
+    message: "Product added to cart successfully",
     data: newAddtocart,
   });
 });

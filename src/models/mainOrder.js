@@ -53,14 +53,26 @@ const mainOrderSchema = new mongoose.Schema(
       required: true,
     },
     assignDileveryBoyId: {
-      type: mongoose.Schema.Types.ObjectId, ref: "Driver"
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Driver",
     },
     isDriverAssign: {
-       type: "Boolean",
-       default: false
-    }
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
+
+// ✅ Add this virtual after schema definition but before exporting
+mainOrderSchema.virtual("subOrders", {
+  ref: "SubOrder", // The model to use
+  localField: "_id", // Field in MainOrder
+  foreignField: "mainOrderId", // Field in SubOrder that relates to MainOrder
+});
+
+// ✅ If you want it to be included in JSON output, add this:
+mainOrderSchema.set("toObject", { virtuals: true });
+mainOrderSchema.set("toJSON", { virtuals: true });
 
 module.exports = mongoose.model("MainOrder", mainOrderSchema);

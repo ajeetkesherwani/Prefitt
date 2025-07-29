@@ -18,23 +18,36 @@ const addToCartSchema = new mongoose.Schema(
       required: true,
     },
     quantity: {
-      type: String,
+      type: Number,
       required: true,
     },
-    variant: {
-      value: { type: String, required: true },
-      price: { type: Number, required: true },
-      discountPrice: { type: Number, required: true },
-      variantTypeId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "VariantType",
-        required: true,
+    variants: [
+      {
+        variantTypeId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "VariantType",
+          required: true,
+        },
+        value: {
+          type: String,
+          required: true,
+        },
       },
+    ],
+    basePrice: {
+      type: Number,
+      required: true,
+    },
+    addOnPrice: {
+      type: Number,
+      default: 0,
+    },
+    finalPrice: {
+      type: Number,
+      required: true,
     },
   },
   { timestamps: true }
 );
 
-const AddToCart = mongoose.model("AddToCart", addToCartSchema);
-
-module.exports = AddToCart;
+module.exports = mongoose.model("AddToCart", addToCartSchema);
