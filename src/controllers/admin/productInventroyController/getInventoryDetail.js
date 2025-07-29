@@ -11,7 +11,11 @@ exports.getOneInventory = catchAsync(async (req, res, next) => {
     path: "inventoryData.variantData.variantType_id",
     model: "VariantType",
     select: "variantName" 
-  });
+  }) .populate({
+      path: "product_id",
+      model: "Products",           
+      select: "name",      
+    });
 
     if (!inventoryDetails) return next(new AppError("Inventory not found", 404));
 
