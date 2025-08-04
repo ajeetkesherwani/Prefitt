@@ -60,6 +60,10 @@ const mainOrderSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    deliveryInstructions: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );

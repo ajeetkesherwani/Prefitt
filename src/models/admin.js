@@ -5,13 +5,17 @@ const adminSchema = mongoose.Schema(
   {
     image: { type: String },
     name: { type: String, required: true },
-    email: { type: String, required: true },
-    phoneNo: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    phoneNo: { type: String, required: true, match: /^[0-9]{10}$/ },
     password: { type: String, required: true },
     resetOtpExpires: { type: String, required: false },
-    address: { type: String, required: true },
-    resetOtp: { type: String, required: false },
-    bio: { type: String, required: true },
+    address: { type: String, required: false },
+    resetOtpExpires: { type: Date },
+    bio: { type: String, required: false },
+    role: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Role",
+    },
   },
   {
     timestamps: true,

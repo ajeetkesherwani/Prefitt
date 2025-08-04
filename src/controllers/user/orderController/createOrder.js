@@ -36,25 +36,29 @@ const createSubOrder = async (
     const inventory = inventoryMap.get(productId.toString());
 
     if (!inventory) {
-      return next(
-        new AppError(
-          `Inventory not found for this Product Id ${productId}`,
-          404
-        )
+      throw new AppError(
+        `Inventory not found for this Product Id ${productId}`,
+        404
       );
     }
 
-    const matchedInventory = inventory.inventoryData.find((inv) =>
-      inv.variantData.some(
-        (v) =>
-          v.variantType_id.toString() === variant.variantTypeId.toString() &&
-          v.value === variant.value
-      )
-    );
+    const matchedInventory = inventory.inventoryData.find((inv) => {
+      if (inv.variantData.length !== product.variant.length) return false;
+
+      // Check if every variant in the product matches one in the inventory
+      return product.variant.every((pVar) =>
+        inv.variantData.some(
+          (v) =>
+            v.variantType_id.toString() === pVar.variantType_id.toString() &&
+            v.value === pVar.value
+        )
+      );
+    });
 
     if (!matchedInventory) {
-      return next(
-        new AppError(`varaint ${variant.value} not found in inventory`, 400)
+      throw new AppError(
+        `variant ${variant.value} not found in inventory`,
+        400
       );
     }
 
@@ -138,14 +142,16 @@ const calculateProductDetails = (products) => {
 };
 
 exports.createOrder = catchAsync(async (req, res, next) => {
-  const { address, paymentMethod, cart } = req.body;
+  const { addressID, paymentMethod, cart } = req.body;
   const user_Id = req.user.id;
-
+  console.log("User ID:", user_Id);
   if (!cart || cart.length === 0) {
     return next(new AppError("Cart is empty", 400));
   }
 
-  const orderAddress = await saveOrderAddress(address);
+  // if (address) {
+  //   const orderAddress = await saveOrderAddress(address);
+  // }
 
   const orderNumber = "ORD-" + Date.now();
   const mainOrder = new MainOrder({
@@ -157,7 +163,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
     paymentMethod,
     paymentStatus: paymentMethod === "COD" ? "pending" : "paid",
     couponSummary: [],
-    address: orderAddress._id,
+    address: addressID,
   });
 
   await mainOrder.save();

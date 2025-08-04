@@ -11,7 +11,7 @@ exports.deleteAddress = catchAsync(async (req, res) => {
 
   const deleteAddress = await UserAddress.findByIdAndDelete(id);
   if (!deleteAddress) {
-    return new AppError(`Category not found.`, 400);
+    return new AppError(`Address not found.`, 400);
   }
 
   return res.status(200).json({
