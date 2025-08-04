@@ -59,14 +59,6 @@ exports.createOrderReturnRequest = catchAsync(async (req, res, next) => {
     refundNewAccount: is_refundToSourceAccount ? undefined : refundNewAccount,
   });
 
-  // Fetch and update main order
-  //   const mainOrder = await MainOrder.findById(orderId);
-  //   if (!mainOrder) {
-  //     return next(new AppError("Main order not found", 404));
-  //   }
-
-  //   mainOrder.orderStatus = "returned";
-
   // Save both
   await returnRequest.save();
   //   await mainOrder.save();

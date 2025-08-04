@@ -35,6 +35,8 @@ exports.getData = catchAsync(async (req, res, next) => {
       user_Id: new mongoose.Types.ObjectId(user_Id), // Corrected line
       items,
       totalAmount,
+      deliveryCharge: 0, // Assuming no delivery charge for simplicity
+      multiStoreHandlingFee: 0, // Assuming multi-vendor platform
       createdAt: new Date(),
       updatedAt: new Date(),
     };

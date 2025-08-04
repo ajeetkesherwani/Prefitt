@@ -12,9 +12,10 @@ exports.getOrderList = catchAsync(async (req, res, next) => {
     .sort({ createdAt: -1 });
 
   if (!orders || orders.length === 0) {
-    return res.status(404).json({
-      success: false,
+    return res.status(200).json({
+      success: true,
       message: "No orders found for this user",
+      data: [],
     });
   }
 
