@@ -19,6 +19,7 @@ router.use("/productInventory", require("./admin/inventoryRoutes"));
 router.use("/user", require("./admin/userRoutes"));
 router.use("/mainOrder", require("./admin/orderRoutes"));
 router.use("/driver", require("./admin/driverRoutes"));
+router.use("/wallet", require("./admin/walletRoutes"));
 
 router.use("/role", require("./admin/roleRoutes"));
 

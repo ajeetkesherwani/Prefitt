@@ -5,12 +5,13 @@ const { successResponse } = require("../../../utils/responseHandler");
 
 
 exports.updateDriverProfile = catchAsync(async (req, res, next) => {
+
   const { driverId } = req.params;
-  if(!driverId) return next(new AppError("driverId is required", 400));
+  if (!driverId) return next(new AppError("driverId is required", 400));
 
   const {
     firstName, lastName, dob, gender, email, address, mobile, vehicleType,
-    latitude, longitude,
+    location,
     licNumber, accountNumber, ifscCode, bankName
   } = req.body;
 
@@ -25,14 +26,15 @@ exports.updateDriverProfile = catchAsync(async (req, res, next) => {
   driver.address = address || driver.address;
   driver.mobile = mobile || driver.mobile;
   driver.vehicleType = vehicleType || driver.vehicleType;
-  driver.latitude = latitude || driver.latitude;
-  driver.longitude = longitude || driver.longitude;
+
+  if (location.latitude) driver.location.latitude = location.latitude;
+  if (location.longitude) driver.location.longitude = location.longitude;
 
   if (req.files?.frontPhoto?.[0]?.path) {
     driver.frontPhoto = req.files.frontPhoto[0].path;
   }
 
-  
+
   const details = driver.details;
   if (details) {
     if (licNumber) details.licence.number = licNumber;
@@ -71,6 +73,7 @@ exports.updateDriverProfile = catchAsync(async (req, res, next) => {
   const updatedDriver = await Driver.findById(driverId)
     .populate("details")
     .populate("accounts");
+
 
   successResponse(res, "Driver profile updated successfully", updatedDriver);
 });

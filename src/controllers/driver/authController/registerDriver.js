@@ -9,9 +9,9 @@ const { successResponse } = require("../../../utils/responseHandler");
 exports.registerDriver = catchAsync(async (req, res, next) => {
   const {
     firstName, lastName, dob, gender, email, address, mobile, vehicleType,
-    latitude, longitude,
-    licNumber, accountNumber, ifscCode, bankName
+    licNumber, accountNumber, ifscCode, bankName, location
   } = req.body;
+
 
   const requiredFields = [
     { field: firstName, name: "First Name" },
@@ -22,8 +22,8 @@ exports.registerDriver = catchAsync(async (req, res, next) => {
     { field: address, name: "Address" },
     { field: mobile, name: "Mobile" },
     { field: vehicleType, name: "Vehicle Type" },
-    { field: latitude, name: "Latitude" },
-    { field: longitude, name: "Longitude" },
+    { field: location?.latitude, name: "Latitude" },
+    { field: location?.longitude, name: "Longitude" },
     { field: licNumber, name: "License Number" },
     { field: accountNumber, name: "Account Number" },
     { field: ifscCode, name: "IFSC Code" },
@@ -77,11 +77,10 @@ exports.registerDriver = catchAsync(async (req, res, next) => {
     address,
     mobile,
     vehicleType,
-    latitude,
-    longitude,
     frontPhoto: req.files?.frontPhoto?.[0]?.path,
     details: detailDoc._id,
     accounts: accountDoc._id,
+    location
   });
 
   const populatedDriver = await Driver.findById(driverDoc._id)

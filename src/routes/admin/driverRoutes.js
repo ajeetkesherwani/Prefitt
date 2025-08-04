@@ -16,10 +16,20 @@ const {
     deleteDriver 
 } = require("../../controllers/admin/driverController/deleteDriver");
 
+const { 
+    updateDriverStatus 
+} = require("../../controllers/admin/driverController/updateDriverStatus");
+
+const { 
+    updateDriverBlockStatus 
+} = require("../../controllers/admin/driverController/isBlockStatusUpdate");
+
 const router = express.Router();
 
 router.get("/list", adminAuthenticate, getAllDriver);
 router.get("/list/:driverId", adminAuthenticate, getDriverDetail);
 router.delete("/delete/:driverId", adminAuthenticate, deleteDriver);
+router.patch("/update/status/:driverId", adminAuthenticate, updateDriverStatus);
+router.patch("/update/block/status/:driverId", adminAuthenticate, updateDriverBlockStatus);
 
 module.exports = router;
