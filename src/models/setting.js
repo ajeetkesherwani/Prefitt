@@ -12,7 +12,8 @@ const settingSchema = mongoose.Schema({
     email: { type: String, default: "" },
     mobile: { type: String, default: "" },
     address: { type: String, default: "" },
-
+    driver_commission:  {type: Number, default: 0},
+    vendor_commission: { type: Number, default: 0 }
 });
 
 const Setting = mongoose.model("Setting", settingSchema);
