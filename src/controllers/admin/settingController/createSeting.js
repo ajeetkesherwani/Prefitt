@@ -12,14 +12,14 @@ exports.createSetting = catchAsync(async (req, res, next) => {
         agreement,
         email,
         mobile,
-        address, } = req.body;
+        address,
+        driver_commission, vendor_commission} = req.body;
 
-    if (!brandName || !commission ||
-        !onboardingFee || !plateformFee
-        || !finalPlateformFee || !agreement || !email || !mobile || !address) {
+    if (!brandName || !commission ||!onboardingFee || !plateformFee
+        || !finalPlateformFee || !agreement || !email 
+        || !mobile || !address || !driver_commission || !vendor_commission) {
         return next(new AppError("all fields are required", 400));
     }
-
 
     const logoFile = req?.files?.logo?.[0];
     const logo = logoFile?.path || "";
@@ -27,7 +27,7 @@ exports.createSetting = catchAsync(async (req, res, next) => {
 
     const setting = new Setting({
         brandName, logo, commission, gst, onboardingFee, plateformFee, finalPlateformFee,
-        agreement, email, mobile, address
+        agreement, email, mobile, address, driver_commission, vendor_commission
     });
 
     await setting.save();

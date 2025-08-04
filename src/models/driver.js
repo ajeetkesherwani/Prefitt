@@ -54,6 +54,10 @@ const driverSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    commission: {
+        type: Number,
+        default: 0,
+    },
     walletBalance: {
         type: Number,
         default: 0
@@ -68,7 +72,6 @@ const driverSchema = new mongoose.Schema({
             default: ""
         }
     },
-
     frontPhoto: {
         type: String,
         required: true,

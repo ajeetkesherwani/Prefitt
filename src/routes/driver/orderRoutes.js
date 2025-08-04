@@ -20,10 +20,6 @@ const {
     deliveryPhotoUpload
 } = require("../../controllers/driver/OrderController/deliveryUploadPhotot");
 
-const {
-    orderDelivered
-} = require("../../controllers/driver/OrderController/updateDeliverdOrderStatus");
-
 const fileUploader = require("../../middlewares/fileUploader");
 
 const router = express.Router();
@@ -37,8 +33,5 @@ router.post("/uploadPhoto/:subOrderId", driverAuthenticate,
         { name: "deliveryPhoto", maxCount: 5 }
     ]),
     deliveryPhotoUpload);
-
-router.patch("/update/deliverd/order/status/:subOrderId", driverAuthenticate, orderDelivered )
-
 
 module.exports = router;
