@@ -22,5 +22,10 @@ router.use("/driver", require("./admin/driverRoutes"));
 router.use("/wallet", require("./admin/walletRoutes"));
 
 router.use("/role", require("./admin/roleRoutes"));
+router.use("/totalOrder", require("./admin/orderManageRoutes"));
+router.use("/revenue", require("./admin/revenueRoutes"));
+router.use("/customer", require("./admin/customerRoutes"));
+router.use("/retailer", require("./admin/retailerRoutes"));
+router.use("/deliveryBoy", require("./admin/deliveryBoyRoutes"));
 
 module.exports = router;
