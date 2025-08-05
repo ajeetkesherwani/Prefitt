@@ -20,11 +20,15 @@ const {
 const {
   updateVariant,
 } = require("../../controllers/admin/variantController/updateVariant");
+const { 
+  getVariantsByProductId 
+} = require("../../controllers/admin/variantController/getVaraintsByProductId");
 
 router.get("/list", adminAuthenticate, allVariant);
 router.post("/create", adminAuthenticate, createVariant);
 router.patch("/update/:id", adminAuthenticate, updateVariant);
 router.delete("/delete/:id", adminAuthenticate, deleteVariant);
 router.get("/getDataById/:id", adminAuthenticate, getDataById);
+router.get("/list/:productId", adminAuthenticate, getVariantsByProductId );
 
 module.exports = router;
