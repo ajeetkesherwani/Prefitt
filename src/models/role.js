@@ -24,6 +24,7 @@ const roleSchema = new mongoose.Schema(
             edit: { type: String, enum: ["true", "false"], default: "false" },
             delete: { type: String, enum: ["true", "false"], default: "false" },
             list: { type: String, enum: ["true", "false"], default: "false" },
+            view: { type: String, enum: ["true", "false"], default: "false" },
           },
         },
       ],

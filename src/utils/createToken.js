@@ -17,11 +17,11 @@ const createToken = (user, statusCode, res, verify = false) => {
       success: true,
       token,
       data: {
-        user,
+        user: user.toJSON(),
       },
     });
   }
-  console.log(verify);
+
   if (verify) {
     res.cookie("sfvbexamstons", token, cookieOptions);
 

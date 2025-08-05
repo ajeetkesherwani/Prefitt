@@ -12,19 +12,19 @@ const {
   updateUser,
 } = require("../../controllers/admin/adminUserController/updateUser");
 const {
-  getUser,
-} = require("../../controllers/admin/adminUserController/getUser");
+  getDataById,
+} = require("../../controllers/admin/adminUserController/getDataById");
 const {
-  getAllUsers,
-} = require("../../controllers/admin/adminUserController/getAllUsers");
+  getAllUserList,
+} = require("../../controllers/admin/adminUserController/getAllUserList");
 const {
   deleteUser,
 } = require("../../controllers/admin/adminUserController/deleteUser");
 
 //Auth
 router.post("/createUser", adminAuthenticate, createUser);
-router.post("/updateUser", adminAuthenticate, updateUser);
-router.get("/getUser/:id", adminAuthenticate, getUser);
-router.get("/getAllUsers", adminAuthenticate, getAllUsers);
+router.patch("/updateUser/:id", adminAuthenticate, updateUser);
+router.get("/getUser/:id", adminAuthenticate, getDataById);
+router.get("/getAllUsers", adminAuthenticate, getAllUserList);
 router.delete("/deleteUser/:id", adminAuthenticate, deleteUser);
 module.exports = router;

@@ -21,7 +21,7 @@ exports.getOrderDetails = catchAsync(async (req, res, next) => {
     .select("-__v")
     .populate({
       path: "products.productId",
-      select: "name primary_image",
+      select: "_id name primary_image",
     })
     .populate({
       path: "vendorId",

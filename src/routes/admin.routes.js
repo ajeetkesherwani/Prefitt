@@ -22,5 +22,6 @@ router.use("/driver", require("./admin/driverRoutes"));
 router.use("/wallet", require("./admin/walletRoutes"));
 
 router.use("/role", require("./admin/roleRoutes"));
+router.use("/members", require("./admin/adminUserRoutes"));
 
 module.exports = router;

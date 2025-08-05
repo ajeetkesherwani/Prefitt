@@ -41,9 +41,9 @@ exports.getOrderList = catchAsync(async (req, res, next) => {
         createdAt: order.createdAt,
         subOrders: subOrders.map((sub) => ({
           subOrderId: sub._id,
-          // vendor: sub.vendorId,
           totalAmount: sub.totalAmount,
           status: sub.status,
+          shopName: sub.vendorId.shopName,
           products: sub.products.map((p) => ({
             name: p.productId?.name,
             image: p.productId?.primary_image,

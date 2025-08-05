@@ -5,14 +5,21 @@ const catchAsync = require("../../../utils/catchAsync");
 const createToken = require("../../../utils/createToken");
 
 exports.login = catchAsync(async (req, res, next) => {
-  let { email, password } = req.body;
+  const { email, password } = req.body;
+
   if (!email || !password)
-    return next(new AppError("email and password are required.", 404));
+    return next(new AppError("Email and password are required.", 400));
 
-  const admin = await Admin.findOne({ email });
-  // console.log(await bcrypt.hash("123456", 12));
-  if (!admin || !(await admin.matchPassword(password)))
-    return next(new AppError("Invalid email or password.", 404));
+  const admin = await Admin.findOne({ email }).populate("role");
 
-  createToken(admin, 200, res);
+  if (!admin) {
+    return next(new AppError("Invalid email or password.", 401));
+  }
+
+  const isMatch = await bcrypt.compare(password, admin.password);
+  if (!isMatch) {
+    return next(new AppError("Invalid email or password.", 401));
+  }
+
+  createToken(admin, 200, res); // ensures populated role is included in response
 });
