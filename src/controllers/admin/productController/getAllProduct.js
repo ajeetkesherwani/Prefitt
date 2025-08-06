@@ -1,15 +1,23 @@
 const Product = require("../../../models/products");
 const AppError = require("../../../utils/AppError");
 const catchAsync = require("../../../utils/catchAsync");
+const paginate = require("../../../utils/paginate");
 
 exports.getAllProduct = catchAsync(async (req, res) => {
-  const allProduct = await Product.find({})
-    .populate("serviceId", "name status image")
-    .populate("categoryId", "name")
-    .populate("subCategoryId", "name")
-    .populate("vendor", "shopName shopId mobile profileImg");
 
-  if (!allProduct) {
+  const { page, limit } = req.query;
+
+  const allProduct = await paginate(Product, {}, {
+    page,
+    limit,
+    sort: { createdAt: -1 },
+    populate: { path: "serviceId", select: "name status image" },
+    populate: { path: "categoryId", select: "name" },
+    populate: { path: "subCategoryId", select: "name" },
+    populate: { path: "vendor", select: "shopName shopId mobile profileImg" }
+  });
+
+  if (!allProduct || allProduct.paginateData.length === 0) {
     return res.status(404).json({
       success: false,
       message: "No products found for this vendor",
@@ -19,7 +27,7 @@ exports.getAllProduct = catchAsync(async (req, res) => {
   res.status(200).json({
     success: true,
     message: "All products found for the vendor",
-    count: allProduct.length,
+    count: allProduct.paginateData.length,
     data: allProduct,
   });
 });

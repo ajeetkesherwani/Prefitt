@@ -1,20 +1,22 @@
 const driverWalletHistory = require("../../../models/driverWalletHistory");
 const AppError = require("../../../utils/AppError");
 const catchAsync = require("../../../utils/catchAsync");
+const paginate = require("../../../utils/paginate");
 const { successResponse } = require("../../../utils/responseHandler");
 
 
 exports.getAllDriverWalletList = catchAsync(async(req, res, next) => {
 
-    const { reason } = req.query;
+    const { reason, page, limit } = req.query;
     if(!reason) return next(new AppError("query is required", 400));
 
-    const driverWalletList = await driverWalletHistory.find({ reason }).lean();
+    const paginatedResult = await paginate(driverWalletHistory, { reason }, { page, limit });
 
-    if (driverWalletList.length === 0) {
+
+    if (paginatedResult.paginateData.length === 0) {
         return successResponse(res, "No wallet history found for this reason", []);
     }
 
-    successResponse(res, "Driver Wallet History Found" , driverWalletList);
+    successResponse(res, "Driver Wallet History Found" , paginatedResult);
 
 });
