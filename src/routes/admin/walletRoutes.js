@@ -6,11 +6,11 @@ const {
 
 const { 
     getAllVendorWalletList 
-} = require("../../controllers/admin/walletController.js/getAllVendorWalletList");
+} = require("../../controllers/admin/walletController/getAllVendorWalletList");
 
 const { 
     getAllDriverWalletList 
-} = require("../../controllers/admin/walletController.js/getDriverWalletList");
+} = require("../../controllers/admin/walletController/getDriverWalletList");
 
 const router = express.Router();
 

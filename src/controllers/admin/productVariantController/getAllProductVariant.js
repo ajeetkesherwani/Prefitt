@@ -1,4 +1,5 @@
 const ProductVariant = require("../../../models/productVariant");
+const paginate = require("../../../utils/paginate");
 
 exports.getAllProductVariant = async (req, res) => {
   const { variantTypeId } = req.query; // get from query parameters
@@ -10,11 +11,18 @@ exports.getAllProductVariant = async (req, res) => {
       query.variantTypeId = variantTypeId;
     }
 
-    const getProductVariants = await ProductVariant.find(query)
-      .populate("serviceId", "name status image")
-      .populate("variantTypeId", "variantName");
+    const{ page, limit } = req.query;
 
-    if (!getProductVariants || getProductVariants.length === 0) {
+    const getProductVariants = await paginate(ProductVariant, query,{
+      page,
+      limit,
+      sort:{createdAt: -1},
+      populate: { path: "serviceId", select: "name status image" },
+      populate: { path: "variantTypeId", select: "variantName" }
+    });
+
+
+    if (!getProductVariants || getProductVariants.paginateData.length === 0) {
       return res
         .status(404)
         .json({ success: false, message: "productVariants not found" });
@@ -23,7 +31,7 @@ exports.getAllProductVariant = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "productVariant found",
-      count: getProductVariants.length,
+      count: getProductVariants.paginateData.length,
       data: getProductVariants,
     });
   } catch (error) {
