@@ -4,16 +4,30 @@ const {
   errorResponse,
 } = require("../../../utils/responseHandler");
 const Role = require("../../../models/role"); // Assuming Role model is in models/roleModel.js
+const paginate = require("../../../utils/paginate");
 
 // Get all roles
+// exports.getAllRoles = async (req, res) => {
+//   try {
+//     const roles = await Role.find();
+//     successResponse(res, "Roles fetched successfully", roles);
+//   } catch (err) {
+//     errorResponse(res, "Error fetching roles", 500, err.message);
+//   }
+// };
+
 exports.getAllRoles = async (req, res) => {
   try {
-    const roles = await Role.find();
-    successResponse(res, "Roles fetched successfully", roles);
+    const { page, limit } = req.query;
+
+    const result = await paginate(Role, {}, { page, limit });
+
+    successResponse(res, "Roles fetched successfully", result);
   } catch (err) {
     errorResponse(res, "Error fetching roles", 500, err.message);
   }
 };
+
 
 // Get role by ID
 exports.getRoleById = async (req, res) => {
