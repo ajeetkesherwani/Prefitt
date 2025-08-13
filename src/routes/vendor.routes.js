@@ -50,5 +50,7 @@ router.use("/live-order", require("./vendor/liveOrderRoutes.js"));
 router.use("/cmspage", require("./vendor/cmsPageRoutes.js"));
 router.use("/exchangeRequest", require("./vendor/exchangeRoutes.js"));
 router.use("/coupon", require("./vendor/couponRoutes.js"));
+router.use("/lastSettlement", require("./vendor/lastSettlementRoutes.js"));
+router.use("/paymentSettlement", require("./vendor/paymentSettlementRoutes.js"));
 
 module.exports = router;

@@ -24,5 +24,6 @@ router.use("/wallet", require("./admin/walletRoutes"));
 router.use("/role", require("./admin/roleRoutes"));
 router.use("/members", require("./admin/adminUserRoutes"));
 router.use("/dashboard", require("./admin/adminDashBoardRoutes"));
+router.use("/settleWallet", require("./admin/settleWalletRoutes"));
 
 module.exports = router;
