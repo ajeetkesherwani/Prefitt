@@ -88,6 +88,7 @@ const subOrderSchema = new mongoose.Schema(
         "accepted",
         "confirmed",
         "shipped",
+        "pickuped",
         "delivered",
         "cancelled",
         "return_requests",

@@ -36,7 +36,7 @@ const vendorWalletSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["pending", "completed"],
+    enum: ["pending", "settled", ],
     default: "pending"
   },
   commission: {

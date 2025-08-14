@@ -176,7 +176,6 @@ exports.deliveryPhotoUpload = catchAsync(async (req, res, next) => {
     balance_after_transaction: updatedBalance
   });
 
-
   successResponse(res, "subOrder status updated successfully", {
     orderId: subOrder._id,
     status: subOrder.status,
