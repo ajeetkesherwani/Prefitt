@@ -52,5 +52,6 @@ router.use("/exchangeRequest", require("./vendor/exchangeRoutes.js"));
 router.use("/coupon", require("./vendor/couponRoutes.js"));
 router.use("/lastSettlement", require("./vendor/lastSettlementRoutes.js"));
 router.use("/paymentSettlement", require("./vendor/paymentSettlementRoutes.js"));
+router.use("/productVariant", require("./vendor/productVariantRoutes"));
 
 module.exports = router;
