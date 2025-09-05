@@ -6,7 +6,7 @@ exports.getProductVarientById = async (req, res) => {
 
   try {
     const getProductVariants = await ProductVariant.findById(id);
-
+    
     if (!getProductVariants) {
       return new AppError("productVariants not found", 404);
     }
