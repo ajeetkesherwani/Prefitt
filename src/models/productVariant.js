@@ -7,6 +7,11 @@ const productVariantSchema = new mongoose.Schema(
       ref: "Service",
       required: true,
     },
+      productId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Products",
+    required: true,
+  },
 
     variantTypeId: {
       type: mongoose.Schema.Types.ObjectId,
