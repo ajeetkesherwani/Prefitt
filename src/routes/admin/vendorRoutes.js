@@ -14,6 +14,9 @@ const {
 const {
   createVendor,
 } = require("../../controllers/admin/vendorController/createVendor");
+const {
+  updateVendor,
+} = require("../../controllers/admin/vendorController/updateVendor");
 
 router.get("/list", adminAuthenticate, getVendorList);
 router.get("/getDataById/:id", adminAuthenticate, getDataById);
@@ -26,5 +29,15 @@ router.post(
     { name: "digitalSignature", maxCount: 1 },
   ]),
   createVendor
+);
+router.patch(
+  "/update/:vendorId",
+  fileUploader("vendor", [
+    { name: "profileImg", maxCount: 1 },
+    { name: "panImages", maxCount: 1 },
+    { name: "shopImages", maxCount: 1 },
+    { name: "digitalSignature", maxCount: 1 },
+  ]),
+  updateVendor
 );
 module.exports = router;
