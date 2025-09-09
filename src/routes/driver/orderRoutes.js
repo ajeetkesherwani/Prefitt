@@ -22,6 +22,11 @@ const {
 
 const fileUploader = require("../../middlewares/fileUploader");
 
+const { 
+    cancelOrderByDriver 
+} = require("../../controllers/driver/OrderController/cancelAssignOrder");
+
+
 const router = express.Router();
 
 router.get("/list", driverAuthenticate, getAssignOrder);
@@ -33,5 +38,8 @@ router.post("/uploadPhoto/:subOrderId", driverAuthenticate,
         { name: "deliveryPhoto", maxCount: 5 }
     ]),
     deliveryPhotoUpload);
+
+router.patch("/cancel/:subOrderId", driverAuthenticate, cancelOrderByDriver);
+
 
 module.exports = router;

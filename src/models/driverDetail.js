@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const driverDetailSchema = new mongoose.Schema({
 
+
     rcRegistration: {
         frontPhoto: { type: String, required: true, trim: true },
         backPhoto: { type: String, required: true, trim: true }
