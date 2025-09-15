@@ -13,7 +13,7 @@ const cms_pageSchema = new mongoose.Schema({
     },
     type:{
         type: String,
-        enum: ["User", "Vendor", "Other"],
+        enum: ["User", "Vendor", "Driver", "Other"],
         default: "Other"
     },
     about_us: {
