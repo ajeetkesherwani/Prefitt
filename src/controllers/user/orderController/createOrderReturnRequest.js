@@ -96,9 +96,12 @@ exports.createOrderReturnRequest = catchAsync(async (req, res, next) => {
     products: validatedProducts, // Array of products to return with images
   });
 
-  // Save return request
-  await returnRequest.save();
 
+  let mainOrder = await MainOrder.findById(orderId);
+  mainOrder.orderStatus = "returned" // Save return request
+  
+  await returnRequest.save();
+  await mainOrder.save();
   // Send success response
   res.status(201).json({
     success: true,

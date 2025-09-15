@@ -16,6 +16,9 @@ const {
 const {
   createOrderReturnRequest,
 } = require("../../controllers/user/orderController/createOrderReturnRequest");
+const {
+  getReturnOrderStatus,
+} = require("../../controllers/user/orderController/getReturnOrderStatus");
 
 const validateResponse = require("../../middlewares/validateResponse");
 
@@ -25,6 +28,7 @@ const {
 
 const router = express.Router();
 
+router.post('/returnOrderStatus', userAuthenticate, getReturnOrderStatus);
 router.get("/list", userAuthenticate, getOrderList);
 router.get("/details/:id", userAuthenticate, getOrderDetails);
 router.post(
@@ -40,6 +44,7 @@ router.post(
   fileUploader("orderReturn", [{ name: "uploadFiles", maxCount: 5 }]),
   createOrderReturnRequest
 );
+
 
 router.post("/createExchangeRequest", userAuthenticate,
    fileUploader("exchangeOrder", [{ name: "uploadFiles", maxCount: 5 }]),

@@ -1,12 +1,16 @@
+// import MainOrder from "../../../models/mainOrder.js";
+// import SubOrder from "../../../models/SubOrder.js";
+// import OrderAddress from "../../../models/OrderAddress.js";
+// import catchAsync from "../../../utils/catchAsync.js";
+// import AppError from "../../../utils/AppError.js";
 const MainOrder = require("../../../models/mainOrder");
 const SubOrder = require("../../../models/SubOrder");
-const OrderAddress = require("../../../models/OrderAddress");
 const catchAsync = require("../../../utils/catchAsync");
 const AppError = require("../../../utils/AppError");
 
 exports.getOrderDetails = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-
+console.log("Fetching details for order ID:", id);
   const mainOrder = await MainOrder.findById(id).select("-__v").populate({
     path: "address",
     model: OrderAddress,
@@ -21,7 +25,7 @@ exports.getOrderDetails = catchAsync(async (req, res, next) => {
     .select("-__v")
     .populate({
       path: "products.productId",
-      select: "_id name primary_image",
+      select: "productId name primary_image",
     })
     .populate({
       path: "vendorId",
@@ -38,6 +42,7 @@ exports.getOrderDetails = catchAsync(async (req, res, next) => {
     totalAmount: sub.totalAmount,
     status: sub.status,
     products: sub.products.map((p) => ({
+      productId: p.productId?._id,
       name: p.productId?.name,
       image: p.productId?.primary_image,
       quantity: p.quantity,

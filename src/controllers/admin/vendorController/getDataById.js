@@ -4,7 +4,7 @@ const AppError = require("../../../utils/AppError");
 exports.getDataById = async (req, res) => {
   const id = req.params.id;
   try {
-    const vendorData = await Vendor.findById(id);
+    const vendorData = await Vendor.findById(id).populate("serviceId","name");
     if (!vendorData) {
       return new AppError("Vendor not found", 400);
     }

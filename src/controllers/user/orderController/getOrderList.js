@@ -25,7 +25,7 @@ exports.getOrderList = catchAsync(async (req, res, next) => {
         .select("vendorId products totalAmount status")
         .populate({
           path: "products.productId",
-          select: "name primary_image",
+          select: "productId name primary_image",
         })
         .populate({
           path: "vendorId",
@@ -45,6 +45,7 @@ exports.getOrderList = catchAsync(async (req, res, next) => {
           status: sub.status,
           shopName: sub.vendorId.shopName,
           products: sub.products.map((p) => ({
+            productId: p.productId._id,
             name: p.productId?.name,
             image: p.productId?.primary_image,
             quantity: p.quantity,
