@@ -13,7 +13,7 @@ exports.getOrderDetails = catchAsync(async (req, res, next) => {
 console.log("Fetching details for order ID:", id);
   const mainOrder = await MainOrder.findById(id).select("-__v").populate({
     path: "address",
-    model: OrderAddress,
+    model: "UserAddesses",
     select: "-__v",
   });
 

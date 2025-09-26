@@ -8,7 +8,7 @@ exports.getOrderList = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
 
   const orders = await MainOrder.find({ user_Id: userId })
-    .select("_id orderNumber paymentMethod totalAmount createdAt")
+    .select("_id orderNumber paymentMethod totalAmount orderStatus createdAt")
     .sort({ createdAt: -1 });
 
   if (!orders || orders.length === 0) {
@@ -31,6 +31,8 @@ exports.getOrderList = catchAsync(async (req, res, next) => {
           path: "vendorId",
           select: "shopName profileImg",
         });
+
+
 
       return {
         _id: order._id,

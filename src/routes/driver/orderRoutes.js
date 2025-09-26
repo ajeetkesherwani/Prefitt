@@ -26,7 +26,7 @@ const router = express.Router();
 
 router.get("/list", driverAuthenticate, getAssignOrder);
 router.get("/list/:subOrderId", driverAuthenticate, getAssignOrderDetails);
-router.put("/update/status/:subOrderId", driverAuthenticate, updateOrderStatus);
+router.patch("/update/status/:subOrderId", driverAuthenticate, updateOrderStatus);
 
 router.post("/uploadPhoto/:subOrderId", driverAuthenticate,
     fileUploader("deliveryPhoto", [

@@ -22,8 +22,8 @@ exports.registerDriver = catchAsync(async (req, res, next) => {
     { field: address, name: "Address" },
     { field: mobile, name: "Mobile" },
     { field: vehicleType, name: "Vehicle Type" },
-    { field: location?.latitude, name: "Latitude" },
-    { field: location?.longitude, name: "Longitude" },
+    // { field: location?.latitude, name: "Latitude" },
+    // { field: location?.longitude, name: "Longitude" },
     { field: licNumber, name: "License Number" },
     { field: accountNumber, name: "Account Number" },
     { field: ifscCode, name: "IFSC Code" },
@@ -34,7 +34,7 @@ exports.registerDriver = catchAsync(async (req, res, next) => {
   if (error) return next(error);
 
   const driverExists = await Driver.findOne({ mobile });
-  if (driverExists) return next(new AppError("Driver already registered", 400));
+  // if (driverExists) return next(new AppError("Driver already registered", 400));
 
   const driverDetail = {
     rcRegistration: {
@@ -68,22 +68,35 @@ exports.registerDriver = catchAsync(async (req, res, next) => {
   const detailDoc = await DriverDetail.create(driverDetail);
   const accountDoc = await DriverAccountDetail.create(driverAccountDetail);
 
-  const driverDoc = await Driver.create({
-    firstName,
-    lastName,
-    dob,
-    gender,
-    email,
-    address,
-    mobile,
-    vehicleType,
-    frontPhoto: req.files?.frontPhoto?.[0]?.path,
-    details: detailDoc._id,
-    accounts: accountDoc._id,
-    location
-  });
+  driverExists.firstName = firstName;
+  driverExists.lastName = lastName;
+  driverExists.dob = dob;
+  driverExists.gender = gender;
+  driverExists.address = address;
+  driverExists.vehicleType = vehicleType;
+  driverExists.frontPhoto = req.files?.frontPhoto?.[0]?.path;
+  driverExists.details = detailDoc._id;
+  driverExists.accounts = accountDoc._id;
+  driverExists.location = location;
 
-  const populatedDriver = await Driver.findById(driverDoc._id)
+  driverExists.save();
+
+  // const driverDoc = await Driver.create({
+  //   firstName,
+  //   lastName,
+  //   dob,
+  //   gender,
+  //   email,
+  //   address,
+  //   mobile,
+  //   vehicleType,
+  //   frontPhoto: req.files?.frontPhoto?.[0]?.path,
+  //   details: detailDoc._id,
+  //   accounts: accountDoc._id,
+  //   location
+  // });
+
+  const populatedDriver = await Driver.findById(driverExists._id)
     .populate("details")
     .populate("accounts");
 

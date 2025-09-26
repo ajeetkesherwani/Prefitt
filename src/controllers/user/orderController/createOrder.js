@@ -3,6 +3,7 @@ const MainOrder = require("../../../models/mainOrder");
 const SubOrder = require("../../../models/SubOrder");
 const catchAsync = require("../../../utils/catchAsync");
 const AppError = require("../../../utils/AppError");
+const AddToCart = require("../../../models/addToCart");
 const {
   successResponse,
   errorResponse,
@@ -36,9 +37,9 @@ const createSubOrder = async (
 
   // console.log("inv data",inv);
   for (const product of products) {
-    if(vendorId == "686b788255c0af8b0b42acf4"){
-      console.log("checkk invalid data",product);
-    }
+    // if(vendorId == "686b788255c0af8b0b42acf4"){
+    //   console.log("checkk invalid data",product);
+    // }
     const { productId, quantity, variant } = product;
 
     const inventory = inventoryMap.get(productId.toString());
@@ -159,10 +160,6 @@ exports.createOrder = catchAsync(async (req, res, next) => {
     return next(new AppError("Cart is empty", 400));
   }
 
-  // if (address) {
-  //   const orderAddress = await saveOrderAddress(address);
-  // }
-
   const orderNumber = "ORD-" + Date.now();
   const mainOrder = new MainOrder({
     user_Id,
@@ -213,6 +210,8 @@ exports.createOrder = catchAsync(async (req, res, next) => {
   const populatedOrder = await MainOrder.findById(mainOrder._id).populate(
     "subOrders"
   );
+
+  const cartData = await AddToCart.findOneAndDelete({user_Id});
 
   successResponse(res, "Order created successfully", populatedOrder, 201);
 });

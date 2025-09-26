@@ -28,7 +28,7 @@ const {
 
 const router = express.Router();
 
-router.post('/returnOrderStatus', userAuthenticate, getReturnOrderStatus);
+router.get('/returnOrderStatus/:id', userAuthenticate, getReturnOrderStatus);
 router.get("/list", userAuthenticate, getOrderList);
 router.get("/details/:id", userAuthenticate, getOrderDetails);
 router.post(

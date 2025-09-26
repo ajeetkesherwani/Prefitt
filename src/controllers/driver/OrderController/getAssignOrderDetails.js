@@ -16,34 +16,76 @@ exports.getAssignOrderDetails = catchAsync(async (req, res, next) => {
     assignDeliveryBoyId: driverId,
     isDeliveryAsign: true,
   })
-    .populate({
-      path: "mainOrderId",
-      select: "orderNumber"
-    })
+    .populate("mainOrderId")
+    .populate("vendorId")
+    .populate("products.productId")
     .lean();
-   
+  
+    console.log("subOrder",subOrder);
 
   if (!subOrder) {
     return next(new AppError("SubOrder not found or not assigned to you", 404));
   }
+  // Build items from subOrder.products using available schema fields.
+  // Each product entry may already contain name and productId (populated or not).
+  const productDetails = (subOrder.products || []).map((item) => {
+    // productId may be ObjectId or populated object
+    const pidObj = item.productId && typeof item.productId === 'object' ? item.productId : null;
+    const productIdValue = pidObj ? pidObj._id : item.productId;
 
-  const productIds = subOrder.products.map(p => p.productId);
-  const productDetails = await Products.find({ _id: { $in: productIds } })
-    .select("name primary_image")
-    .lean();
+    // Prefer item's stored name, then populated product name, then fall back
+    const productName = (item.name && item.name.toString()) || (pidObj && (pidObj.name || pidObj.title)) || 'Unknown Product';
 
-  const items = subOrder.products.map(item => {
-    const productInfo = productDetails.find(p => p._id.toString() === item.productId.toString());
+    // Try multiple common image field names on the populated product
+    const productImage = pidObj && (pidObj.primary_image || pidObj.primaryImage || pidObj.image || pidObj.thumbnail) || null;
+
+    const variant = Array.isArray(item.variant) ? item.variant.map(v => ({ value: v.value, variantTypeId: v.variantTypeId })) : [];
+
+    const totalItemAmount = item.totalItemAmount ?? (typeof item.price === 'number' && typeof item.quantity === 'number' ? item.price * item.quantity : null);
 
     return {
-      productId: item.productId,
-      productName: productInfo?.name || "Unknown Product",
-      productImage: productInfo?.primary_image || null,
-      quantity: item.quantity,
-      price: item.price,
-      orderNumber: subOrder.mainOrderId?.orderNumber || "N/A",
+      productId: productIdValue,
+      productName,
+      productImage,
+      quantity: item.quantity || 0,
+      price: item.price || 0,
+      discountedPrice: item.discountedPrice || null,
+      gstPercentage: item.gstPercentage || null,
+      gstAmount: item.gstAmount || null,
+      totalItemAmount,
+      variant,
+      orderNumber: subOrder.mainOrderId?.orderNumber || 'N/A',
     };
   });
 
-  successResponse(res, "SubOrder items fetched", items);
+  // Basic suborder details
+  const basicSubOrder = {
+    subOrderId: subOrder._id,
+    vendor: {
+      id: subOrder.vendorId?._id || subOrder.vendorId || null,
+      shopName: subOrder.vendorId?.shopName || null,
+      mobile: subOrder.vendorId?.mobile || null,
+      address: subOrder.vendorId?.shopAddress || null,
+    },
+    mainOrder: {
+      id: subOrder.mainOrderId?._id || subOrder.mainOrderId || null,
+      orderNumber: subOrder.mainOrderId?.orderNumber || null,
+      expectedDeliveryTime: subOrder.mainOrderId?.expectedDeliveryTime || null,
+      address: subOrder.mainOrderId?.address || null,
+      user: subOrder.mainOrderId?.user_Id || null,
+    },
+    totals: {
+      subTotal: subOrder.subTotal || null,
+      totalGST: subOrder.totalGST || null,
+      totalAmount: subOrder.totalAmount || null,
+      deliveryCharge: subOrder.deliveryCharge?.amount || null,
+    },
+    status: subOrder.status || null,
+    pickupotp: subOrder.pickupotp || null,
+    expiresAt: subOrder.expiresAt || null,
+    isDeliveryAsign: subOrder.isDeliveryAsign || false,
+    assignDeliveryBoyId: subOrder.assignDeliveryBoyId || null,
+  };
+
+  successResponse(res, 'SubOrder fetched', { subOrder: basicSubOrder, productDetails });
 });
