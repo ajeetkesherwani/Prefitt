@@ -8,7 +8,7 @@ exports.getAssignOrder = async (req, res, next) => {
 
     if (!driverId) return next(new AppError("driverId is not authenticated", 400));
 
-    const subOrder = await SubOrder.findOne({
+    const subOrder = await SubOrder.find({
         assignDeliveryBoyId: driverId,
         isDeliveryAsign: true
     })
@@ -25,37 +25,48 @@ exports.getAssignOrder = async (req, res, next) => {
                 select: "name mobileNo location lat long"
             }
         })
-        .select("_id products pickupotp expiresAt")
+        .select("_id products pickupotp status expiresAt")
         .lean();
 
-    if (!subOrder) return next(new AppError("No assigned suborder found", 404));
+    if (!Array.isArray(subOrder) || subOrder.length === 0) {
+        return next(new AppError("No assigned suborder found", 404));
+    }
 
-    const totalQuantity = subOrder.products?.reduce((sum, item) => sum + (item.quantity || 0), 0);
+    // Map each subOrder to a simplified payload
+    const results = subOrder.map((so) => {
+        const totalQuantity = Array.isArray(so.products)
+            ? so.products.reduce((sum, item) => sum + (item.quantity || 0), 0)
+            : 0;
 
-    const result = {
-        orderId: subOrder._id,
-        pickupFrom: {
-            shopName: subOrder.vendorId?.shopName,
-            vendorPhone: subOrder.vendorId?.mobile,
-            vendorAddress: subOrder.vendorId?.shopAddress,
-            orderNumber: subOrder.mainOrderId?.orderNumber,
-            expectedDeliveryTime: subOrder.mainOrderId?.deliveryTime || "9:35AM",
-            items: totalQuantity,
-            otp: subOrder.pickupotp || 456892
-        },
-        deliveredTo: {
-            userName: subOrder.mainOrderId?.user_Id?.name || "N/A",
-            userPhone: subOrder.mainOrderId?.user_Id?.mobileNo || "N/A",
-            orderNumber: subOrder.mainOrderId?.orderNumber,
-            location: subOrder.mainOrderId?.user_Id?.location?.type,
-            latitude: subOrder.mainOrderId?.user_Id?.lat,
-            longitude: subOrder.mainOrderId?.user_Id?.long,
-            expectedDeliveryTime: "9:35PM",
-            items: totalQuantity
-        }
-    };
+        const expectedDeliveryTime = so.mainOrderId?.expectedDeliveryTime || so.mainOrderId?.deliveryTime || null;
 
-    successResponse(res, "Assigned order details fetched", result);
+        return {
+            orderId: so._id,
+            status:so.status,
+            pickupFrom: {
+                shopName: so.vendorId?.shopName || null,
+                vendorPhone: so.vendorId?.mobile || null,
+                vendorAddress: so.vendorId?.shopAddress || null,
+                orderNumber: so.mainOrderId?.orderNumber || null,
+                expectedDeliveryTime: expectedDeliveryTime || "N/A",
+                items: totalQuantity,
+                otp: so.pickupotp || null,
+                expiresAt: so.expiresAt || null
+            },
+            deliveredTo: {
+                userName: so.mainOrderId?.user_Id?.name || "N/A",
+                userPhone: so.mainOrderId?.user_Id?.mobileNo || "N/A",
+                orderNumber: so.mainOrderId?.orderNumber || null,
+                location: so.mainOrderId?.user_Id?.location?.type || null,
+                latitude: so.mainOrderId?.user_Id?.lat || null,
+                longitude: so.mainOrderId?.user_Id?.long || null,
+                expectedDeliveryTime: so.mainOrderId?.expectedDeliveryTime || null,
+                items: totalQuantity
+            }
+        };
+    });
+
+    successResponse(res, "Assigned order details fetched", results);
     
 };
 

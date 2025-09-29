@@ -49,7 +49,7 @@ const mainOrderSchema = new mongoose.Schema(
 
     address: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "OrderAddress",
+      ref: "UserAddesses",
       required: true,
     },
     assignDileveryBoyId: {

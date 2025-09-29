@@ -11,12 +11,13 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError("Email and password are required.", 400));
 
   const admin = await Admin.findOne({ email }).populate("role");
-
+  console.log("admin",admin);
   if (!admin) {
     return next(new AppError("Invalid email or password.", 401));
   }
 
   const isMatch = await bcrypt.compare(password, admin.password);
+  console.log("isMatch",isMatch);
   if (!isMatch) {
     return next(new AppError("Invalid email or password.", 401));
   }

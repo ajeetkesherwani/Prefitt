@@ -59,12 +59,7 @@ exports.createAddtocart = catchAsync(async (req, res, next) => {
     });
 
     if (!selectedInventory) {
-      successResponse(
-        res,
-        "Selected variant combination not available in inventory",
-        {},
-        200
-      );
+      errorResponse(res, "Selected variant combination not available in inventory");
     }
 
     const addOnPrice = selectedInventory.add_on_price || 0;

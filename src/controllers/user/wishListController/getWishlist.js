@@ -11,7 +11,7 @@ exports.getWishlist = catchAsync(async (req, res, next) => {
 
   const getList = await Wishlist.find({ user_Id }).populate(
     "product_Id",
-    "name primary_image price discountedPrice"
+    "name primary_image price discountedPrice vendor"
   );
   if (!getList) return next(new AppError("Wishlist not found", 404));
 

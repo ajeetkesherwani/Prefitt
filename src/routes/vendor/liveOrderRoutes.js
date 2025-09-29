@@ -6,7 +6,7 @@ const {
 
 const { 
     getLiveOrders 
-} = require("../../controllers/vendor/liveOrderController/getLIveOrder");
+} = require("../../controllers/vendor/liveOrderController/getLiveOrder");
 
 const { 
     liveOrderUpdate 
