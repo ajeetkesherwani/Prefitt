@@ -48,8 +48,12 @@ const driverWalletSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["pending", "completed"],
+    enum: ["pending", "completed","cancelled"],
     default: "pending"
+  },
+  calcelReason: {
+    type: String,
+    default: null
   },
   description: {
     type: String,

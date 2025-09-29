@@ -4,30 +4,30 @@ const driverSchema = new mongoose.Schema({
 
     firstName: {
         type: String,
-        required: true,
+        required: false,
         trim: true
     },
     lastName: {
         type: String,
-        required: true,
+        required: false,
         trim: true
     },
     dob: {
         type: Date,
-        required: true
+        required: false
     },
     gender: {
         type: String,
         enum: ["male", "female", "other"],
-        required: true
+        required: false
     },
     email: {
         type: String,
-        required: true
+        required: false
     },
     address: {
         type: String,
-        required: true
+        required: false
     },
     mobile: {
         type: Number,
@@ -74,7 +74,7 @@ const driverSchema = new mongoose.Schema({
     },
     frontPhoto: {
         type: String,
-        required: true,
+        required: false,
         trim: true
     },
 
@@ -89,6 +89,14 @@ const driverSchema = new mongoose.Schema({
     accounts: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "DriverAccountDetail",
+    },
+    fcmToken:{
+        type:String,
+        default:false
+    },
+    deviceId:{
+        type:String,
+        default:false
     }
 
 }, { timestamps: true });

@@ -18,7 +18,7 @@ exports.updateOrderStatus = catchAsync(async(req, res, next) => {
         return next(new AppError("Unauthorized access", 403));
     }
 
-    subOrder.status = "pickuped";
+    subOrder.status = status;
     await subOrder.save();
 
     successResponse(res, "subOrder status updated successfully", {

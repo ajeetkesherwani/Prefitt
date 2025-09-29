@@ -8,7 +8,7 @@ exports.getOrderList = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
 
   const orders = await MainOrder.find({ user_Id: userId })
-    .select("_id orderNumber paymentMethod totalAmount createdAt")
+    .select("_id orderNumber paymentMethod totalAmount orderStatus createdAt")
     .sort({ createdAt: -1 });
 
   if (!orders || orders.length === 0) {
@@ -25,12 +25,14 @@ exports.getOrderList = catchAsync(async (req, res, next) => {
         .select("vendorId products totalAmount status")
         .populate({
           path: "products.productId",
-          select: "name primary_image",
+          select: "productId name primary_image",
         })
         .populate({
           path: "vendorId",
           select: "shopName profileImg",
         });
+
+
 
       return {
         _id: order._id,
@@ -45,6 +47,7 @@ exports.getOrderList = catchAsync(async (req, res, next) => {
           status: sub.status,
           shopName: sub.vendorId.shopName,
           products: sub.products.map((p) => ({
+            productId: p.productId._id,
             name: p.productId?.name,
             image: p.productId?.primary_image,
             quantity: p.quantity,

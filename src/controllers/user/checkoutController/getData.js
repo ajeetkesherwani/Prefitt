@@ -20,6 +20,7 @@ exports.getData = catchAsync(async (req, res, next) => {
     const items = cartItems.map((item) => {
       totalAmount += item.finalPrice * item.quantity;
       return {
+        _id: item._id,
         product_Id: item.product_Id,
         vendorId: item.vendorId,
         quantity: item.quantity,

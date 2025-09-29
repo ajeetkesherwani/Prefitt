@@ -93,6 +93,7 @@ const subOrderSchema = new mongoose.Schema(
         "cancelled",
         "return_requests",
         "return_received",
+        "rejectByDelivery",
       ],
       default: "pending",
     },

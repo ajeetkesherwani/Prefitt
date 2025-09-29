@@ -3,6 +3,7 @@ const MainOrder = require("../../../models/mainOrder");
 const SubOrder = require("../../../models/SubOrder");
 const catchAsync = require("../../../utils/catchAsync");
 const AppError = require("../../../utils/AppError");
+const AddToCart = require("../../../models/addToCart");
 const {
   successResponse,
   errorResponse,
@@ -18,24 +19,33 @@ const createSubOrder = async (
   products,
   coupon = null,
   mainOrderId
-) => {
+) => {console.log("were0",products);
+  
   const productIds = products.map((p) => p.productId);
-
+  console.log("vendorId",vendorId);
+  console.log("productIds",productIds);
   const allInventories = await ProductInventory.find({
     vendor_id: vendorId,
     product_id: { $in: productIds },
   });
 
+  console.log("allInventories data",allInventories);
   const inventoryMap = new Map();
   for (const inv of allInventories) {
     inventoryMap.set(inv.product_id.toString(), inv);
   }
 
+  // console.log("inv data",inv);
   for (const product of products) {
+    // if(vendorId == "686b788255c0af8b0b42acf4"){
+    //   console.log("checkk invalid data",product);
+    // }
     const { productId, quantity, variant } = product;
+
     const inventory = inventoryMap.get(productId.toString());
 
     if (!inventory) {
+      console.log("product data", product);
       throw new AppError(
         `Inventory not found for this Product Id ${productId}`,
         404
@@ -141,17 +151,14 @@ const calculateProductDetails = (products) => {
   return { items, subTotal, gstTotal };
 };
 
-exports.createOrder = catchAsync(async (req, res, next) => {
+exports.createOrder = catchAsync(async (req, res, next) => { 
   const { addressID, paymentMethod, cart } = req.body;
   const user_Id = req.user.id;
   console.log("User ID:", user_Id);
+  console.log("cart",cart);
   if (!cart || cart.length === 0) {
     return next(new AppError("Cart is empty", 400));
   }
-
-  // if (address) {
-  //   const orderAddress = await saveOrderAddress(address);
-  // }
 
   const orderNumber = "ORD-" + Date.now();
   const mainOrder = new MainOrder({
@@ -174,6 +181,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
   let subOrderIds = [];
   let couponSummary = [];
 
+  console.log("cart data",cart);
   for (const vendorCart of cart) {
     const { vendorId, products, coupon } = vendorCart;
 
@@ -202,6 +210,8 @@ exports.createOrder = catchAsync(async (req, res, next) => {
   const populatedOrder = await MainOrder.findById(mainOrder._id).populate(
     "subOrders"
   );
+
+  const cartData = await AddToCart.findOneAndDelete({user_Id});
 
   successResponse(res, "Order created successfully", populatedOrder, 201);
 });
