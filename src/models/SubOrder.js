@@ -116,11 +116,12 @@ const subOrderSchema = new mongoose.Schema(
       ref: "Driver",
       default: null,
     },
-    cancellReson: { 
-      type:String, 
-      enum:["i am not available this time", "i am busy"],
-      default:"i am busy",
-     }
+    deliveryPhoto: { type: [String] },
+    cancellReson: {
+      type: String,
+      enum: ["i am not available this time", "i am busy"],
+      default: "i am busy",
+    }
   },
   { timestamps: true }
 );

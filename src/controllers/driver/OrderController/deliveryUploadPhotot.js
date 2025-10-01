@@ -22,49 +22,49 @@ const calculateVendorEarning = ({ totalAmount, commission = 0 }) => {
 //vendor wallet history function
 
 const createVendorWalletHistory = async ({ vendorId, orderId, orderNumber, amount,
-    type, reason, commission, totalAmount, status, description
-    }) => {
+  type, reason, commission, totalAmount, status, description
+}) => {
 
-    const vendor = await Vendor.findById(vendorId);
-    if (!vendor) return next(new AppError("Vendor not found", 404));
+  const vendor = await Vendor.findById(vendorId);
+  if (!vendor) return next(new AppError("Vendor not found", 404));
 
-    vendor.wallet_balance = vendor.wallet_balance || 0;
-    if (type === "credit") {
-        vendor.wallet_balance += amount;
-    } else {
-        vendor.wallet_balance -= amount;
-    }
+  vendor.wallet_balance = vendor.wallet_balance || 0;
+  if (type === "credit") {
+    vendor.wallet_balance += amount;
+  } else {
+    vendor.wallet_balance -= amount;
+  }
 
-    await vendor.save();
+  await vendor.save();
 
-    const vendor_wallet_history = await VendorWallet.create({
-        vendorId,
-        orderId,
-        orderNumber,
-        amount,
-        type,
-        reason,
-        status,
-        commission,
-        totalAmount,
-        description,
-        balance_after_transaction: vendor.wallet_balance
-    });
+  const vendor_wallet_history = await VendorWallet.create({
+    vendorId,
+    orderId,
+    orderNumber,
+    amount,
+    type,
+    reason,
+    status,
+    commission,
+    totalAmount,
+    description,
+    balance_after_transaction: vendor.wallet_balance
+  });
 
-    return {
-        vendor_wallet_history
-    };
+  return {
+    vendor_wallet_history
+  };
 }
 
 
 //driver wallet history function
 
 const createDriverWallet = async ({ driverId, orderId, amount,
-    type, reason, commission, totalAmount, description, 
-    status }) => {
+  type, reason, commission, totalAmount, description,
+  status }) => {
 
-    const driver = await Driver.findById(driverId);
-   if (!driver) throw new AppError("Driver not found", 404);
+  const driver = await Driver.findById(driverId);
+  if (!driver) throw new AppError("Driver not found", 404);
 
   driver.walletBalance = driver.walletBalance || 0;
 
@@ -77,29 +77,29 @@ const createDriverWallet = async ({ driverId, orderId, amount,
   await driver.save();
 
 
-    const driver_wallet_history = await DriverWalletHistory.create({
-        driverId,
-        orderId,
-        amount,
-        type,
-        reason,
-        status,
-        commission,
-        totalAmount,
-        description,
-        balance_after_transaction: driver.walletBalance
-    });
+  const driver_wallet_history = await DriverWalletHistory.create({
+    driverId,
+    orderId,
+    amount,
+    type,
+    reason,
+    status,
+    commission,
+    totalAmount,
+    description,
+    balance_after_transaction: driver.walletBalance
+  });
 
-    return {
-        driver_wallet_history
-    };
+  return {
+    driver_wallet_history
+  };
 }
 
 
 exports.deliveryPhotoUpload = catchAsync(async (req, res, next) => {
 
   const driverId = req.driver._id;
-  
+
   const { subOrderId } = req.params;
 
   const subOrder = await SubOrder.findById(subOrderId);
@@ -110,7 +110,7 @@ exports.deliveryPhotoUpload = catchAsync(async (req, res, next) => {
   }
 
   if (subOrder.status === "delivered") {
-      return next(new AppError("This order is already marked as delivered", 400));
+    return next(new AppError("This order is already marked as delivered", 400));
   }
 
   const uploadedPhotos = req.files?.deliveryPhoto?.map(file => file.path);
@@ -123,7 +123,7 @@ exports.deliveryPhotoUpload = catchAsync(async (req, res, next) => {
 
   subOrder.status = "delivered";
 
-    await subOrder.save();
+  await subOrder.save();
 
   //vendor wallet_history 
 
@@ -155,7 +155,6 @@ exports.deliveryPhotoUpload = catchAsync(async (req, res, next) => {
 
 
   //driver wallet_history
-
   const deliveryCharge = 40;
 
   const driver = await Driver.findById(driverId);

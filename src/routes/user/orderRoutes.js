@@ -22,14 +22,16 @@ const {
 
 const validateResponse = require("../../middlewares/validateResponse");
 
-const { 
-  createExchangeRequests 
+const {
+  createExchangeRequests
 } = require("../../controllers/user/orderController/createExchangeRequest");
+const { trackOrder } = require("../../controllers/user/orderController/getOrderTracking");
 
 const router = express.Router();
 
 router.get('/returnOrderStatus/:id', userAuthenticate, getReturnOrderStatus);
 router.get("/list", userAuthenticate, getOrderList);
+router.get("/trackOrder/:orderId", userAuthenticate, trackOrder);
 router.get("/details/:id", userAuthenticate, getOrderDetails);
 router.post(
   "/create",
@@ -47,7 +49,7 @@ router.post(
 
 
 router.post("/createExchangeRequest", userAuthenticate,
-   fileUploader("exchangeOrder", [{ name: "uploadFiles", maxCount: 5 }]),
-   createExchangeRequests);
+  fileUploader("exchangeOrder", [{ name: "uploadFiles", maxCount: 5 }]),
+  createExchangeRequests);
 
 module.exports = router;
