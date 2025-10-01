@@ -11,7 +11,7 @@ exports.updateDriverAccount = catchAsync(async (req, res, next) => {
     const driver = await Driver.findById(driverId).populate("accounts");
 
     if (!driver) return next(new AppError("Driver not found", 404));
-    
+
     if (!driver.accounts) return next(new AppError("Driver account details not found", 404));
 
     const account = driver.accounts;
@@ -19,10 +19,11 @@ exports.updateDriverAccount = catchAsync(async (req, res, next) => {
     const allowedFields = [
         "bankName",
         "accountNumber",
-        "ifscCode"
+        "ifscCode",
+        "accountHolderName"
     ];
 
-       allowedFields.forEach((field) => {
+    allowedFields.forEach((field) => {
         if (req.body[field] !== undefined) {
             account[field] = req.body[field];
         }

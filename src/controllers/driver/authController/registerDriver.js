@@ -9,7 +9,7 @@ const { successResponse } = require("../../../utils/responseHandler");
 exports.registerDriver = catchAsync(async (req, res, next) => {
   const {
     firstName, lastName, dob, gender, email, address, mobile, vehicleType,
-    licNumber, accountNumber, ifscCode, bankName, location
+    licNumber, accountNumber, accountHolderName, ifscCode, bankName, location
   } = req.body;
 
 
@@ -28,6 +28,7 @@ exports.registerDriver = catchAsync(async (req, res, next) => {
     { field: accountNumber, name: "Account Number" },
     { field: ifscCode, name: "IFSC Code" },
     { field: bankName, name: "Bank Name" },
+    { field: accountHolderName, name: "Account Holder Name" }
   ];
 
   let error = validateRequiredFields(requiredFields);
