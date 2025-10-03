@@ -8,17 +8,17 @@ const mongoose = require("mongoose")
 
 exports.getDriverEarning = catchAsync(async (req, res, next) => {
 
-    const driverId = req.driver.id;
-    if (!driverId) return next(new AppError("driverId is required", 400));
+  const driverId = req.driver.id;
+  if (!driverId) return next(new AppError("driverId is required", 400));
 
-    const { filter } = req.query;
+  const { filter } = req.query;
 
-    let startDate, endDate;
+  let startDate, endDate;
 
-    const today = moment().startOf("day");
+  const today = moment().startOf("day");
 
-if (!filter) {
-    startDate = new Date("1970-01-01"); 
+  if (!filter) {
+    startDate = new Date("1970-01-01");
     endDate = new Date(); // now
   } else if (filter === "day") {
     startDate = moment().startOf("day").toDate();
@@ -33,64 +33,63 @@ if (!filter) {
     return next(new AppError("Invalid filter type", 400));
   }
 
-    //total earning
-    const totalEarningsAgg = await DriverWalletHistory.aggregate([
-        {
-            $match: {
-              driverId: new mongoose.Types.ObjectId(driverId), 
-                type: "credit",
-                status: "pending",
-                createdAt: { $gte: startDate, $lte: endDate }
-            }
-        },
-        { $group: { _id: null, total: { $sum: "$amount" } } }
-    ]);
+  //total earning
+  const totalEarningsAgg = await DriverWalletHistory.aggregate([
+    {
+      $match: {
+        driverId: new mongoose.Types.ObjectId(driverId),
+        type: "credit",
+        status: "pending",
+        createdAt: { $gte: startDate, $lte: endDate }
+      }
+    },
+    { $group: { _id: null, total: { $sum: "$amount" } } }
+  ]);
 
-    const earnings = totalEarningsAgg[0]?.total || 0;
+  const earnings = totalEarningsAgg[0]?.total || 0;
 
-    //trip count
-    const totalTrips = await SubOrder.countDocuments({
-       assignDeliveryBoyId: new mongoose.Types.ObjectId(driverId),
-        status: "delivered",
-        updatedAt: { $gte: startDate, $lte: endDate }
-    });
-     
-    //active houres
-    const trips = await SubOrder.find({
-        assignDeliveryBoyId: driverId,
-        status: "delivered",
-        updatedAt: { $gte: startDate, $lte: endDate }
-    }).select("createdAt updatedAt");
-    console.log("trip", trips);
-   
+  //trip count
+  const totalTrips = await SubOrder.countDocuments({
+    assignDeliveryBoyId: new mongoose.Types.ObjectId(driverId),
+    status: "delivered",
+    updatedAt: { $gte: startDate, $lte: endDate }
+  });
 
-    let activeHours = 0;
-    trips.forEach(trip => {
-        if (trip.createdAt && trip.updatedAt) {
-            const diff = moment(trip.updatedAt).diff(moment(trip.createdAt), "hours", true);
-            activeHours += diff;
-        }
-    });
-
-    // Last balance (from last transaction)
-    const lastTransaction = await DriverWalletHistory.findOne({ driverId })
-        .sort({ createdAt: -1 });
-      
-
-    const balance = lastTransaction?.balance_after_transaction || 0;
+  //active houres
+  const trips = await SubOrder.find({
+    assignDeliveryBoyId: driverId,
+    status: "delivered",
+    updatedAt: { $gte: startDate, $lte: endDate }
+  }).select("createdAt updatedAt");
 
 
-    res.status(200).json({
-        success: true,
-        filter,
-        dateRange: {
-            start: startDate,
-            end: endDate
-        },
-        earnings,
-        totalTrips,
-        activeHours: Math.round(activeHours),
-        balance,
-    });
 
+  let activeHours = 0;
+  trips.forEach(trip => {
+    if (trip.createdAt && trip.updatedAt) {
+      const diff = moment(trip.updatedAt).diff(moment(trip.createdAt), "hours", true);
+      activeHours += diff;
+    }
+  });
+
+  // Last balance (from last transaction)
+  const lastTransaction = await DriverWalletHistory.findOne({ driverId })
+    .sort({ createdAt: -1 });
+
+
+  const balance = lastTransaction?.balance_after_transaction || 0;
+
+
+  res.status(200).json({
+    success: true,
+    filter,
+    dateRange: {
+      start: startDate,
+      end: endDate
+    },
+    earnings,
+    totalTrips,
+    activeHours: Math.round(activeHours),
+    balance,
+  });
 });
