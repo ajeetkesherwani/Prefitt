@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const driverAccountSchema = new mongoose.Schema({
 
     accountNumber: { type: String, required: true, trim: true },
-    accountHolderName: { type: String, required: true, trim: true },
+    accountHolderName: { type: String },
     ifscCode: { type: String, required: true, trim: true },
     bankName: { type: String, required: true, trim: true },
     bankType: { type: String, enum: ["Saving", "Fixed Account", "Other"], default: "Saving" }

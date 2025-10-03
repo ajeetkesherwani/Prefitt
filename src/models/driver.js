@@ -13,7 +13,7 @@ const driverSchema = new mongoose.Schema({
         trim: true
     },
     dob: {
-        type: Date,
+        type: String,
         required: false
     },
     gender: {
@@ -96,13 +96,13 @@ const driverSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "DriverAccountDetail",
     },
-    fcmToken:{
-        type:String,
-        default:false
+    fcmToken: {
+        type: String,
+        default: false
     },
-    deviceId:{
-        type:String,
-        default:false
+    deviceId: {
+        type: String,
+        default: false
     }
 
 }, { timestamps: true });

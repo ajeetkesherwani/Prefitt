@@ -28,7 +28,6 @@ exports.registerDriver = catchAsync(async (req, res, next) => {
     { field: accountNumber, name: "Account Number" },
     { field: ifscCode, name: "IFSC Code" },
     { field: bankName, name: "Bank Name" },
-    { field: accountHolderName, name: "Account Holder Name" }
   ];
 
   let error = validateRequiredFields(requiredFields);
@@ -64,7 +63,7 @@ exports.registerDriver = catchAsync(async (req, res, next) => {
   error = validateRequiredFields(requiredFiles);
   if (error) return next(error);
 
-  const driverAccountDetail = { accountNumber, ifscCode, bankName };
+  const driverAccountDetail = { accountNumber, ifscCode, bankName, accountHolderName };
 
   const detailDoc = await DriverDetail.create(driverDetail);
   const accountDoc = await DriverAccountDetail.create(driverAccountDetail);
